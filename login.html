@@ -1,1 +1,254 @@
-<!DOCTYPE html><html lang="pt-PT"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Login - MúsicosBooking</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);color:#333;min-height:100vh;display:flex;align-items:center;justify-content:center}.login-container{background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-width:500px;width:100%;padding:3rem;margin:1rem}.logo{text-align:center;margin-bottom:2rem;font-size:2rem;color:#D4AF37;font-weight:700}h1{font-size:1.8rem;color:#1a1a1a;margin-bottom:0.5rem;text-align:center}p{text-align:center;color:#666;margin-bottom:2rem}.form-group{margin-bottom:1.5rem}.radio-group{display:flex;gap:1rem;margin-bottom:2rem;justify-content:center}label{display:block;margin-bottom:0.5rem;font-weight:600;color:#1a1a1a}input[type="email"],input[type="password"],input[type="text"]{width:100%;padding:0.8rem;border:1px solid #ddd;border-radius:5px;font-family:'Poppins',sans-serif;font-size:1rem;transition:border-color 0.3s}input:focus{outline:0;border-color:#D4AF37;box-shadow:0 0 5px rgba(212,175,55,0.2)}input[type="radio"]{margin-right:0.5rem}.btn{width:100%;padding:1rem;background:#D4AF37;color:#1a1a1a;border:none;border-radius:50px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:1rem}.btn:hover{background:#b8941f;transform:translateY(-2px)}.checkbox-group{display:flex;align-items:center;margin-bottom:1.5rem;gap:0.5rem}.footer-text{text-align:center;margin-top:2rem;color:#666}.footer-text a{color:#D4AF37;text-decoration:none;font-weight:600}.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}.modal-content{background:#fff;padding:2rem;border-radius:10px;max-width:400px;width:90%}.modal-header{margin-bottom:1.5rem}.modal h2{font-size:1.5rem;color:#1a1a1a}.modal-close{float:right;font-size:1.5rem;cursor:pointer;color:#666}@media(max-width:768px){.login-container{margin:0;border-radius:0;height:100vh;padding:2rem;display:flex;flex-direction:column;justify-content:center}}</style></head><body><div class="login-container"><div class="logo">🎵 MúsicosBooking</div><h1>Entrar</h1><p>Aceda à sua conta</p><form id="loginForm"><div class="radio-group"><label><input type="radio" name="tipo" value="empresa" checked> Sou Empresa</label><label><input type="radio" name="tipo" value="musico"> Sou Músico</label></div><div class="form-group"><label>Email</label><input type="email" id="email" placeholder="seu@email.com" required></div><div class="form-group"><label>Senha</label><input type="password" id="senha" placeholder="••••••••" required></div><div class="checkbox-group"><input type="checkbox" id="lembrar" name="lembrar"><label for="lembrar" style="margin:0">Lembrar-me por 30 dias</label></div><button type="button" class="btn" onclick="entrar()">Entrar</button></form><div class="footer-text"><p><a href="#" onclick="esqueciSenha()">Esqueci a senha</a></p><p>Não tem conta?</p><a href="#" onclick="irRegistro()">Criar conta</a></div></div><div id="modalEsqueci" class="modal"><div class="modal-content"><div class="modal-header"><span class="modal-close" onclick="fecharModal()">&times;</span><h2>Recuperar Senha</h2></div><form id="formEsqueci"><div class="form-group"><label>Email</label><input type="email" id="emailRecupera" placeholder="seu@email.com" required></div><button type="button" class="btn" onclick="enviarEmail()">Enviar Link</button></form></div></div><script>function entrar(){const email=document.getElementById('email').value;const senha=document.getElementById('senha').value;const tipo=document.querySelector('input[name="tipo"]:checked').value;if(!email||!senha){alert('Preencha todos os campos');return;}localStorage.setItem('usuario_email',email);localStorage.setItem('usuario_tipo',tipo);localStorage.setItem('usuario_logado','true');if(tipo==='empresa'){window.location.href='dashboard-empresa.html';}else{window.location.href='dashboard-musico.html';}}function esqueciSenha(){document.getElementById('modalEsqueci').style.display='flex';}function fecharModal(){document.getElementById('modalEsqueci').style.display='none';}function enviarEmail(){const email=document.getElementById('emailRecupera').value;if(!email){alert('Insira seu email');return;}alert('Link de recuperação foi enviado para '+email);fecharModal();}function irRegistro(){window.location.href='registo.html';}</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MúsicosBooking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .message.error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+        
+        .message.success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+        
+        .message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>MúsicosBooking</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" id="submitBtn">Entrar</button>
+        </form>
+        
+        <div class="links">
+            <a href="#">Esqueceu a senha?</a><br>
+            <span>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></span>
+        </div>
+    </div>
+
+    <script>
+        // Banco de dados local simulado
+        const usuarios = {
+            'brunovivo26@gmail.com': {
+                senha: 'dba66369',
+                nome: 'Bruno Vivo',
+                tipo: 'musico'
+            },
+            'admin@musicosbooking.pt': {
+                senha: 'Admin123',
+                nome: 'Administrador',
+                tipo: 'empresa'
+            },
+            'teste@musico.pt': {
+                senha: '123456',
+                nome: 'Músico Teste',
+                tipo: 'musico'
+            },
+            'teste@empresa.pt': {
+                senha: '123456',
+                nome: 'Empresa Teste',
+                tipo: 'empresa'
+            }
+        };
+
+        // Função para mostrar mensagens
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // Verifica se já está logado
+        if (localStorage.getItem('userLogado')) {
+            const user = JSON.parse(localStorage.getItem('userLogado'));
+            if (user.tipo === 'musico') {
+                window.location.href = 'dashboard-musico.html';
+            } else {
+                window.location.href = 'dashboard-empresa.html';
+            }
+        }
+
+        // Handler do formulário
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Validação
+            if (!email || !senha) {
+                showMessage('Por favor, preencha todos os campos', 'error');
+                return;
+            }
+            
+            // Desabilita botão
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Entrando...';
+            
+            // Simula delay de rede
+            setTimeout(() => {
+                // Verifica credenciais
+                if (usuarios[email] && usuarios[email].senha === senha) {
+                    // Login bem-sucedido
+                    const user = {
+                        email: email,
+                        nome: usuarios[email].nome,
+                        tipo: usuarios[email].tipo,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    // Salva no localStorage
+                    localStorage.setItem('userLogado', JSON.stringify(user));
+                    localStorage.setItem('token', 'mock_token_' + Date.now());
+                    
+                    showMessage('Login realizado com sucesso!', 'success');
+                    
+                    // Redireciona após 1 segundo
+                    setTimeout(() => {
+                        if (user.tipo === 'musico') {
+                            window.location.href = 'dashboard-musico.html';
+                        } else {
+                            window.location.href = 'dashboard-empresa.html';
+                        }
+                    }, 1000);
+                } else {
+                    // Credenciais inválidas
+                    showMessage('E-mail ou senha inválidos', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Entrar';
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>
