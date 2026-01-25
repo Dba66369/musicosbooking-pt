@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Notícias e Tendências Musicais | MúsicosBooking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background: #000;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active, .tab:hover {
+            background: #FFD700;
+            border-color: #FFD700;
+            color: #000;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        
+        .blog-content {
+            padding: 25px;
+        }
+        
+        .blog-category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #FFD700;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .blog-title {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #000;
+        }
+        
+        .blog-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .read-more {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MúsicosBooking</a>
+            <div class="nav-links">
+                <a href="index.html">Início</a>
+                <a href="index.html#musicos">Músicos</a>
+                <a href="para-empresas.html">Para Empresas</a>
+                <a href="blog.html">Blog</a>
+                <a href="eventos.html">Eventos</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="hero">
+        <h1>Blog MúsicosBooking</h1>
+        <p>Notícias, tendências e insights do mundo da música em Portugal</p>
+    </div>
+    
+    <div class="container">
+        <div class="filter-tabs">
+            <div class="tab active">Todos</div>
+            <div class="tab">Para Músicos</div>
+            <div class="tab">Para Empresas</div>
+            <div class="tab">Tendências 2026</div>
+            <div class="tab">Música Clássica</div>
+            <div class="tab">Eventos em Portugal</div>
+        </div>
+        
+        <div class="blog-grid">
+            <!-- Artigo 1 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Para Músicos</span>
+                    <h2 class="blog-title">Como Profissionalizar o seu Perfil Musical em 2026</h2>
+                    <p class="blog-excerpt">Descubra as melhores práticas para escolher o repertório certo, criar um portfólio visual impressionante e atrair clientes corporativos de alto nível.</p>
+                    <div class="blog-meta">
+                        <span>25 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 2 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Tendências 2026</span>
+                    <h2 class="blog-title">Géneros Musicais em Alta nos Eventos de Luxo</h2>
+                    <p class="blog-excerpt">Jazz contemporâneo, música clássica e fado eletrónico dominam os eventos premium em Lisboa e Porto. Veja por quê e como adaptar-se.</p>
+                    <div class="blog-meta">
+                        <span>23 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 3 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Música Clássica</span>
+                    <h2 class="blog-title">A Renascença da Música Clássica em Casamentos Portugueses</h2>
+                    <p class="blog-excerpt">Quartetos de cordas, harpistas e pianistas estão a ganhar terreno nos casamentos de luxo. Conheça os compositores mais requisitados.</p>
+                    <div class="blog-meta">
+                        <span>20 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 4 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Para Empresas</span>
+                    <h2 class="blog-title">Guia Completo: Contratar Música ao Vivo para Eventos Corporativos</h2>
+                    <p class="blog-excerpt">Orçamento, timing, escolha de repertório e questões legais. Tudo o que gestores de eventos precisam saber antes de contratar músicos.</p>
+                    <div class="blog-meta">
+                        <span>18 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 5 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Eventos em Portugal</span>
+                    <h2 class="blog-title">Calendário de Festivais de Música 2026 em Portugal</h2>
+                    <p class="blog-excerpt">Primavera Sound, NOS Alive, Super Bock Super Rock e mais. Confira as datas, artistas confirmados e oportunidades para músicos locais.</p>
+                    <div class="blog-meta">
+                        <span>15 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 6 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Para Músicos</span>
+                    <h2 class="blog-title">Precificação Estratégica: Quanto Cobrar por Evento em 2026?</h2>
+                    <p class="blog-excerpt">Análise de mercado com valores médios por tipo de evento, região de Portugal e nível de experiência. Dados atualizados para 2026.</p>
+                    <div class="blog-meta">
+                        <span>12 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 7 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Tendências 2026</span>
+                    <h2 class="blog-title">O Renascimento do Fado: Nova Geração de Fadistas</h2>
+                    <p class="blog-excerpt">Carminho, Cuca Roseta e novos talentos estão a reinventar o fado para audiências modernas. Conheça os nomes para ficar de olho.</p>
+                    <div class="blog-meta">
+                        <span>10 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 8 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Para Empresas</span>
+                    <h2 class="blog-title">ROI de Música ao Vivo: Vale a Pena Investir?</h2>
+                    <p class="blog-excerpt">Estudo mostra que eventos com música ao vivo têm 73% mais engajamento. Descubra como medir o retorno do investimento em entretenimento.</p>
+                    <div class="blog-meta">
+                        <span>08 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artigo 9 -->
+            <div class="blog-card">
+                <div class="blog-image"></div>
+                <div class="blog-content">
+                    <span class="blog-category">Música Clássica</span>
+                    <h2 class="blog-title">Trilhas Sonoras Ic ónicas: De Amadeus a Bohemian Rhapsody</h2>
+                    <p class="blog-excerpt">Como filmes sobre música clássica e rock influenciam as escolhas musicais de eventos modernos. Playlist inspirada incluída.</p>
+                    <div class="blog-meta">
+                        <span>05 Jan 2026</span>
+                        <a href="#" class="read-more">Ler mais →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
