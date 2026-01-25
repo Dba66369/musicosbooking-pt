@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato e Orçamento - MúsicosBooking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            color: #333;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #D4AF37;
+            font-weight: 700;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        input[type="email"],
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 0;
+            border-color: #D4AF37;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: #D4AF37;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: #b8941f;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+        }
+        .footer-text a {
+            color: #D4AF37;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        @media(max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">♪ MúsicosBooking</div>
+        <h1>Solicitar Orçamento</h1>
+        <p>Preencha o formulário abaixo e entraremos em contato em breve</p>
+        
+        <div id="alert" class="alert"></div>
+        
+        <form id="contactForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome Completo *</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Telefone *</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="+351 910 000 000" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Evento *</label>
+                    <select id="tipoEvento" name="tipoEvento" required>
+                        <option value="">Selecione...</option>
+                        <option value="casamento">Casamento</option>
+                        <option value="corporativo">Evento Corporativo</option>
+                        <option value="festa">Festa Privada</option>
+                        <option value="restaurante">Restaurante/Bar</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data do Evento *</label>
+                    <input type="date" id="dataEvento" name="dataEvento" required>
+                </div>
+                <div class="form-group">
+                    <label>Localização *</label>
+                    <input type="text" id="localizacao" name="localizacao" placeholder="Lisboa" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Estilo Musical Preferido</label>
+                <select id="estiloMusical" name="estiloMusical">
+                    <option value="">Selecione...</option>
+                    <option value="mpb">MPB</option>
+                    <option value="jazz">Jazz</option>
+                    <option value="classica">Clássica</option>
+                    <option value="pop-rock">Pop/Rock</option>
+                    <option value="fado">Fado</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Orçamento Estimado (€)</label>
+                <input type="text" id="orcamento" name="orcamento" placeholder="Ex: 500-1000">
+            </div>
+
+            <div class="form-group">
+                <label>Detalhes Adicionais *</label>
+                <textarea id="mensagem" name="mensagem" placeholder="Conte-nos mais sobre seu evento, número de convidados, duração, etc..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Enviar Orçamento</button>
+        </form>
+
+        <div class="footer-text">
+            <p><a href="index.html">← Voltar para página inicial</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const alertDiv = document.getElementById('alert');
+            
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            
+            // Get form data
+            const formData = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                tipoEvento: document.getElementById('tipoEvento').value,
+                dataEvento: document.getElementById('dataEvento').value,
+                localizacao: document.getElementById('localizacao').value,
+                estiloMusical: document.getElementById('estiloMusical').value,
+                orcamento: document.getElementById('orcamento').value,
+                mensagem: document.getElementById('mensagem').value
+            };
+            
+            try {
+                // Send to backend API
+                const response = await fetch('/api/enviar-orcamento', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Success
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.textContent = 'Orçamento enviado com sucesso! Entraremos em contato em breve.';
+                    alertDiv.style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                } else {
+                    throw new Error(result.error || 'Erro ao enviar');
+                }
+            } catch (error) {
+                // Error
+                alertDiv.className = 'alert alert-error';
+                alertDiv.textContent = 'Erro ao enviar orçamento: ' + error.message;
+                alertDiv.style.display = 'block';
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Orçamento';
+                
+                // Scroll to alert
+                alertDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dataEvento').setAttribute('min', today);
+    </script>
+</body>
+</html>
