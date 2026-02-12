@@ -1,0 +1,39 @@
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Environment (para desenvolvimento local futuro)
+.env
+.env.local
+.env.production
+
+# Node modules (para Firebase Functions)
+node_modules/
+backend/functions/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Secrets (nunca commitar)
+serviceAccountKey.json
+firebase-adminsdk-*.json
+
+# Backup de credenciais antigas
+**/firebase.config.old.js
