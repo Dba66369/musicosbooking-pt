@@ -250,5 +250,65 @@
             }, 800);
         });
     </script>
+
+    <!-- Firebase Auth System -->
+    <script src="/js/config/firebase.config.js"></script>
+    <script src="/js/firebase.js"></script>
+    <script src="/js/auth.js"></script>
+    
+    <script>
+    // Atualizar formulário de login para usar Firebase Auth
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe')?.checked || false;
+        const submitBtn = document.querySelector('button[type="submit"]');
+        
+        try {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'A entrar...';
+            
+            const result = await window.authSystem.login(email, password, rememberMe);
+            
+            // Redirecionar baseado em tipo de utilizador
+            const userType = result.userData.tipo;
+            const redirectParam = new URLSearchParams(window.location.search).get('redirect');
+            
+            if (redirectParam) {
+                window.location.href = decodeURIComponent(redirectParam);
+            } else if (userType === 'musico') {
+                window.location.href = '/dashboard-musico.html';
+            } else if (userType === 'empresa') {
+                window.location.href = '/dashboard-empresa.html';
+            } else {
+                window.location.href = '/index.html';
+            }
+            
+        } catch (error) {
+            alert(error.message);
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Entrar';
+        }
+    });
+    
+    // Link de recuperação de password
+    const forgotLink = document.querySelector('a[href*="recuperar"]');
+    if (forgotLink) {
+        forgotLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = prompt('Introduza o seu email para recuperar a password:');
+            if (email) {
+                try {
+                    await window.authSystem.recuperarPassword(email);
+                    alert('Email de recuperação enviado! Verifique a sua caixa de entrada.');
+                } catch (error) {
+                    alert(error.message);
+                }
+            }
+        });
+    }
+    </script>
 </body>
 </html>
