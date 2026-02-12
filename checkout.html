@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Checkout - MúsicosBooking</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        header { background: #1a1a1a; color: #ffd700; padding: 20px; text-align: center; margin-bottom: 30px; }
+        header a { color: #ffd700; text-decoration: none; font-size: 24px; font-weight: bold; }
+        .checkout-form { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #1a1a1a; margin-bottom: 30px; }
+        h2 { color: #333; margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #ffd700; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        input:focus { outline: none; border-color: #ffd700; box-shadow: 0 0 5px rgba(255,215,0,0.3); }
+        .payment-details { background: #f9f9f9; padding: 20px; border-left: 4px solid #ffd700; margin: 20px 0; border-radius: 4px; }
+        .payment-details p { margin: 12px 0; color: #333; line-height: 1.6; }
+        .iban { font-weight: bold; color: #1a1a1a; font-size: 16px; font-family: monospace; }
+        button { background: #ffd700; color: #1a1a1a; padding: 15px 30px; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        button:hover { background: #ffed4e; }
+        .order-summary { background: #f0f0f0; padding: 20px; border-radius: 4px; margin-bottom: 30px; border-left: 4px solid #ffd700; }
+        .order-summary p { margin: 10px 0; color: #333; }
+        .valor { color: #ffd700; font-weight: bold; font-size: 18px; }
+        small { color: #666; display: block; margin-top: 5px; }
+        fieldset { border: none; padding: 0; margin: 0; }
+        legend { font-size: 18px; padding: 0; margin: 20px 0 15px 0; }
+        .success { background: #4caf50; color: white; padding: 20px; border-radius: 4px; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">MúsicosBooking</a>
+    </header>
+
+    <div class="container">
+        <div class="checkout-form">
+            <h1>💳 Confirmar Reserva e Pagamento</h1>
+
+            <div class="order-summary">
+                <h2>Resumo da Reserva</h2>
+                <p><strong>Tipo de Evento:</strong> <span id="tipo-evento">Casamento</span></p>
+                <p><strong>Data:</strong> <span id="data-evento">15/03/2026</span></p>
+                <p><strong>Local:</strong> <span id="local-evento">Lisboa</span></p>
+                <p><strong>Valor Total:</strong> <span class="valor" id="valor-total">€800,00</span></p>
+            </div>
+
+            <form id="checkoutForm">
+                <fieldset>
+                    <legend><h2>Dados Pessoais</h2></legend>
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input id="nome" type="text" name="nome" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input id="email" type="email" name="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone *</label>
+                        <input id="telefone" type="tel" name="telefone" required />
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend><h2>Instruções de Pagamento</h2></legend>
+                    <p style="margin-bottom: 20px; color: #666;">Efectue a transferência bancária para os dados abaixo. O seu pedido será confirmado assim que recebermos o comprovante.</p>
+                    
+                    <div class="payment-details">
+                        <h3 style="color: #ffd700; margin-bottom: 15px;">🏦 Dados Bancários</h3>
+                        <p><strong>Titular da Conta:</strong> MúsicosBooking, Lda.</p>
+                        <p><strong>IBAN:</strong> <span class="iban">PT50 0005 0000 0000 0000 0023</span></p>
+                        <p><strong>BIC/SWIFT:</strong> GEBAPTPL</p>
+                        <p><strong>Banco:</strong> Millennium BCP</p>
+                        <p><strong>País:</strong> Portugal</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="referencia">Referência de Pagamento (use na transferência) *</label>
+                        <input id="referencia" type="text" name="referencia" readonly value="" />
+                        <small>⚠️ IMPORTANTE: Use esta referência na descrição da transferência para identificação automática</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor-transferencia">Valor a Transferir (€) *</label>
+                        <input id="valor-transferencia" type="number" name="valor" readonly />
+                        <small>Este é o valor que deve transferir</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comprovante">📸 Enviar Comprovante de Transferência *</label>
+                        <input id="comprovante" type="file" name="comprovante" accept="image/*,application/pdf" required />
+                        <small>Envie a foto ou PDF do comprovante da transferência</small>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend><h2>Termos e Condições</h2></legend>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="termos" required /> Li e concordo com os Termos e Condições *</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="privacidade" required /> Li e concordo com a Política de Privacidade *</label>
+                    </div>
+                </fieldset>
+
+                <button type="submit">✓ Confirmar Pedido e Enviar Comprovante</button>
+            </form>
+
+            <div id="mensagem" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        function gerarReferencia() {
+            const data = new Date();
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const dia = String(data.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000);
+            return `MB${ano}${mes}${dia}${String(random).padStart(4, '0')}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('referencia').value = gerarReferencia();
+            document.getElementById('valor-transferencia').value = '800';
+        });
+
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const referencia = document.getElementById('referencia').value;
+            const valor = document.getElementById('valor-transferencia').value;
+
+            document.getElementById('mensagem').innerHTML = `
+                <div class="success">
+                    <h3>✓ Pedido Recebido com Sucesso!</h3>
+                    <p>Referência: <strong>${referencia}</strong></p>
+                    <p>Receberá um email de confirmação em <strong>${email}</strong></p>
+                    <p style="margin-top: 15px; font-size: 14px;">⏳ Processaremos o seu pedido assim que confirmarmos o pagamento.</p>
+                </div>
+            `;
+
+            document.getElementById('checkoutForm').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
