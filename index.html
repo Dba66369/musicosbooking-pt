@@ -5,153 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MúsicosBooking - Conecte Talentos Musicais</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            line-height: 1.6;
-            background: #f5f5f5;
-        }
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-        }
-        header {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #D4AF37;
-            text-decoration: none;
-        }
-        nav {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: #D4AF37;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-        .btn-primary {
-            background: #D4AF37;
-            color: #1a1a1a;
-        }
-        .btn-primary:hover {
-            background: #b8941f;
-            transform: translateY(-3px);
-        }
-        .btn-secondary {
-            background: 0;
-            color: #D4AF37;
-            border: 2px solid #D4AF37;
-        }
-        .btn-secondary:hover {
-            background: #D4AF37;
-            color: #1a1a1a;
-        }
-        .hero {
-            background: linear-gradient(135deg,#1a1a1a,#2a2a2a);
-            color: #fff;
-            padding: 6rem 2rem;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #D4AF37;
-        }
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            color: #d0d0d0;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        section {
-            padding: 4rem 2rem;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #1a1a1a;
-        }
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border-top: 4px solid #D4AF37;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .card h3 {
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        footer {
-            background: #1a1a1a;
-            color: #fff;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; background: #f5f5f5; scroll-behavior: smooth; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        header { background: #1a1a1a; color: #fff; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #D4AF37; text-decoration: none; }
+        nav { display: flex; gap: 2rem; list-style: none; }
+        nav a { color: #fff; text-decoration: none; font-weight: 500; transition: color 0.3s; cursor: pointer; }
+        nav a:hover { color: #D4AF37; }
+        .btn { display: inline-block; padding: 0.7rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
+        .btn-primary { background: #D4AF37; color: #1a1a1a; }
+        .btn-primary:hover { background: #b8941f; transform: translateY(-3px); }
+        .btn-secondary { background: 0; color: #D4AF37; border: 2px solid #D4AF37; }
+        .btn-secondary:hover { background: #D4AF37; color: #1a1a1a; }
+        .hero { background: linear-gradient(135deg,#1a1a1a,#2a2a2a); color: #fff; padding: 6rem 2rem; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; color: #D4AF37; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; color: #d0d0d0; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 5rem 2rem; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #1a1a1a; }
+        .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .card { background: #fff; border-radius: 10px; padding: 2rem; box-shadow: 0 3px 10px rgba(0,0,0,0.1); transition: all 0.3s; border-top: 4px solid #D4AF37; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .card h3 { color: #1a1a1a; margin-bottom: 1rem; font-size: 1.5rem; }
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .contact-form { max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; }
+        footer { background: #1a1a1a; color: #fff; text-align: center; padding: 3rem 2rem; margin-top: 4rem; }
+        footer a { color: #D4AF37; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -167,10 +52,33 @@
     <section class="hero">
         <div class="container">
             <h1>Encontre Músicos Perfeitos para Seu Evento</h1>
-            <p>Conectamos você com os melhores talentos musicais da região. Solos, bandas, DJs e muito mais!</p>
+            <p>Conectamos você com os melhores talentos musicais de Portugal. Solos, bandas, DJs e muito mais!</p>
             <div class="hero-buttons">
-                <a href="checkout.html" class="btn btn-primary">Agendar Agora</a>
-                <a href="#servicos" class="btn btn-secondary">Saber Mais</a>
+                <a href="musicos.html" class="btn btn-primary">Agendar Agora</a>
+                <a href="#processo" class="btn btn-secondary">Saber Mais</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="processo" style="background: #fff;">
+        <div class="container">
+            <h2 class="section-title">Como Funciona</h2>
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>1. Escolha</h3>
+                    <p>Navegue pela nossa lista de músicos profissionais e escolha o que melhor se adapta ao seu evento.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <h3>2. Orçamento</h3>
+                    <p>Solicite um orçamento sem compromisso. Nossa equipe validará a disponibilidade em tempo real.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">✅</div>
+                    <h3>3. Confirmação</h3>
+                    <p>Após a aprovação, receba o link de pagamento seguro e garanta a data no calendário do artista.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -182,33 +90,72 @@
                 <div class="card">
                     <div class="card-icon">🎸</div>
                     <h3>Músicos Solo</h3>
-                    <p>Guitarristas, pianistas e violinistas para eventos especiais.</p>
+                    <p>Guitarristas, pianistas e violinistas para casamentos e jantares.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🎹</div>
                     <h3>Bandas Completas</h3>
-                    <p>Bandas profissionais para casamentos, festas e corporativos.</p>
+                    <p>Bandas profissionais para festas corporativas e grandes eventos.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🎧</div>
                     <h3>DJs</h3>
-                    <p>DJs experientes com equipamento de primeira qualidade.</p>
+                    <p>Sets personalizados com equipamento de luz e som de alta fidelidade.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="sobre" style="background: #f0f0f0;">
+    <section id="sobre" style="background: #1a1a1a; color: white;">
         <div class="container">
-            <h2 class="section-title">Por Que Nos Escolher?</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto; font-size: 1.1rem; color: #555;">
-                Com mais de 10 anos de experiência, conectamos clientes a músicos de qualidade. Oferecemos suporte 24/7, preços competitivos e garantia de satisfação em cada evento.
-            </p>
+            <h2 class="section-title" style="color: #D4AF37;">Sobre Nós</h2>
+            <div class="about-grid">
+                <div>
+                    <h3 style="color: #D4AF37;">Missão</h3>
+                    <p>Conectar a alma da música aos momentos mais especiais dos nossos clientes através de uma curadoria de excelência.</p>
+                </div>
+                <div>
+                    <h3 style="color: #D4AF37;">Visão</h3>
+                    <p>Ser a plataforma de referência em Portugal para contratação de talentos musicais com segurança e transparência.</p>
+                </div>
+                <div>
+                    <h3 style="color: #D4AF37;">Valores</h3>
+                    <p>Transparência total, valorização do artista, confiança mútua e qualidade sonora impecável.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato">
+        <div class="container">
+            <h2 class="section-title">Fale Conosco</h2>
+            <div class="contact-form">
+                <div style="margin-bottom: 2rem; text-align: center;">
+                    <p><strong>Email:</strong> geral@musicosbooking.pt</p>
+                    <p><strong>Telefone:</strong> +351 210 000 000 (Chamada rede fixa nacional)</p>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" placeholder="Seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem</label>
+                        <textarea rows="4" placeholder="Como podemos ajudar?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Mensagem</button>
+                </form>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2024 MúsicosBooking. Todos os direitos reservados.</p>
+        <p>© 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
+        <p><a href="#">Privacidade</a> | <a href="#">Termos de Uso</a></p>
     </footer>
 </body>
 </html>
