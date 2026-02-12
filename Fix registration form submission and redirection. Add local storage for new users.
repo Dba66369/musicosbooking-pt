@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo - MúsicosBooking</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); color: #333; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .register-container { background: #fff; border-radius: 10px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); max-width: 600px; width: 100%; padding: 3rem; margin: 1rem; }
+        .logo { text-align: center; margin-bottom: 2rem; font-size: 2rem; color: #D4AF37; font-weight: 700; }
+        h1 { font-size: 1.8rem; color: #1a1a1a; margin-bottom: 0.5rem; text-align: center; }
+        p { text-align: center; color: #666; margin-bottom: 2rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        input[type="text"], input[type="email"], input[type="password"], input[type="tel"] { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; }
+        .btn { width: 100%; padding: 1rem; background: #D4AF37; color: #1a1a1a; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 1rem; margin-top: 1rem; }
+        .btn:hover { background: #b8941f; }
+        .radio-group { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">♪ MúsicosBooking</div>
+        <h1>Criar Conta</h1>
+        <p>Registre-se para começar.</p>
+        
+        <form id="regForm">
+            <div class="radio-group">
+                <label><input type="radio" name="tipo" value="empresa" checked> Sou Empresa</label>
+                <label><input type="radio" name="tipo" value="musico"> Sou Músico</label>
+            </div>
+
+            <div class="form-row">
+                <div><label>Nome Completo</label><input type="text" id="nome" required></div>
+                <div><label>Email</label><input type="email" id="email" required></div>
+            </div>
+
+            <div class="form-row">
+                <div><label>Senha</label><input type="password" id="senha" required></div>
+                <div><label>Confirmar Senha</label><input type="password" id="confSenha" required></div>
+            </div>
+
+            <label><input type="checkbox" required> Concordo com os Termos</label>
+
+            <button type="submit" class="btn">Criar Conta</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('regForm').onsubmit = function(e) {
+            e.preventDefault();
+            const tipo = document.querySelector('input[name="tipo"]:checked').value;
+            localStorage.setItem('usuario_nome', document.getElementById('nome').value);
+            localStorage.setItem('usuario_tipo', tipo);
+            
+            if(tipo === 'musico') {
+                window.location.href = 'dashboard-musico.html';
+            } else {
+                window.location.href = 'dashboard-empresa.html';
+            }
+        };
+    </script>
+</body>
+</html>
