@@ -1,1 +1,163 @@
-<!DOCTYPE html><html lang="pt-PT"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Dashboard Empresa - MúsicosBooking</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#333}header{background:#1a1a1a;color:#fff;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}.logo{font-size:1.5rem;color:#D4AF37;font-weight:700}.user-info{display:flex;gap:1rem;align-items:center}.logout-btn{background:#D4AF37;color:#1a1a1a;border:none;padding:0.5rem 1rem;border-radius:5px;cursor:pointer;font-weight:600}.container{display:flex;min-height:100vh;margin-top:60px}sidebar{width:250px;background:#fff;padding:2rem;box-shadow:0 2px 5px rgba(0,0,0,0.1);position:fixed;left:0;top:60px;height:calc(100vh-60px);overflow-y:auto}sidebar ul{list-style:none}sidebar li{margin:1rem 0}sidebar a{color:#1a1a1a;text-decoration:none;font-weight:600;display:block;padding:0.5rem;border-radius:5px;transition:all 0.3s}sidebar a:hover{background:#D4AF37;color:#1a1a1a}.main{flex:1;margin-left:250px;padding:2rem}.welcome-section{background:#fff;padding:2rem;border-radius:10px;margin-bottom:2rem;box-shadow:0 3px 10px rgba(0,0,0,0.1)}.welcome-section h1{color:#1a1a1a;margin-bottom:0.5rem}.welcome-section p{color:#666}.cta-button{background:#D4AF37;color:#1a1a1a;padding:0.8rem 1.5rem;border:none;border-radius:5px;cursor:pointer;font-weight:600;margin-top:1rem}.stats-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2rem}.stat-card{background:#fff;padding:1.5rem;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);text-align:center;border-top:4px solid #D4AF37}.stat-card h3{font-size:1.8rem;color:#D4AF37;margin-bottom:0.5rem}.stat-card p{color:#666}.music-lists{background:#fff;padding:2rem;border-radius:10px;margin-bottom:2rem;box-shadow:0 3px 10px rgba(0,0,0,0.1)}.music-lists h2{color:#1a1a1a;margin-bottom:1.5rem}.music-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}.music-card{background:#f9f9f9;padding:1rem;border-radius:5px;text-align:center;cursor:pointer;transition:all 0.3s;border:2px solid transparent}.music-card:hover{border-color:#D4AF37;transform:translateY(-3px)}.music-card h4{color:#1a1a1a;margin-bottom:0.5rem;font-size:0.9rem}.musicians-section{background:#fff;padding:2rem;border-radius:10px;margin-bottom:2rem;box-shadow:0 3px 10px rgba(0,0,0,0.1)}.musicians-section h2{color:#1a1a1a;margin-bottom:1.5rem}.filters{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}select{padding:0.5rem;border:1px solid #ddd;border-radius:5px;font-family:'Poppins',sans-serif}.musician-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}.musician-card{background:#f9f9f9;padding:1rem;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}.musician-card img{width:100%;height:150px;object-fit:cover;border-radius:5px;margin-bottom:1rem}.musician-card h3{color:#1a1a1a;margin-bottom:0.5rem}.musician-card .rating{color:#D4AF37;font-weight:600;margin-bottom:0.5rem}.musician-card .price{color:#666;font-size:0.9rem;margin-bottom:1rem}.musician-card button{width:100%;padding:0.5rem;background:#D4AF37;color:#1a1a1a;border:none;border-radius:5px;cursor:pointer;font-weight:600}.payment-section{background:#fff;padding:2rem;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1)}.payment-section h2{color:#1a1a1a;margin-bottom:1.5rem}.payment-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}.payment-card{background:#f9f9f9;padding:1.5rem;border-radius:10px;text-align:center;cursor:pointer;transition:all 0.3s;border:2px solid transparent}.payment-card:hover{border-color:#D4AF37}.payment-card h3{color:#1a1a1a;margin-bottom:1rem}.payment-card p{color:#666;font-size:0.9rem}@media(max-width:768px){.container{flex-direction:column}sidebar{position:fixed;left:-250px;width:250px;transition:left 0.3s}.main{margin-left:0}.stats-container{grid-template-columns:1fr}.music-grid{grid-template-columns:repeat(2,1fr)}.musician-grid{grid-template-columns:1fr}}</style></head><body><header><div class="logo">🎵 MúsicosBooking</div><div class="user-info"><span>Bem-vindo, <span id="nome-usuario">Empresa</span></span><button class="logout-btn" onclick="sairDaConta()">Sair</button></div></header><div class="container"><sidebar><ul><li><a href="#">🏠 Início</a></li><li><a href="#meus-pedidos">📝 Meus Pedidos</a></li><li><a href="#musicos">🎵 Encontrar Músicos</a></li><li><a href="#listas">🎼 Listas de Música</a></li><li><a href="#pagamento">💳 Pagamentos</a></li></ul></sidebar><div class="main"><section class="welcome-section"><h1>Bem-vindo ao MúsicosBooking!</h1><p>Encontre o músico perfeito para seu evento em poucos cliques.</p><button class="cta-button">+ Novo Orçamento</button></section><section class="stats-container"><div class="stat-card"><h3>12</h3><p>Orçamentos Realizados</p></div><div class="stat-card"><h3>2</h3><p>Em Andamento</p></div><div class="stat-card"><h3>4.8/5</h3><p>Taxa de Satisfação</p></div></section><section id="listas" class="music-lists"><h2>🎵 Sugestões de Música para seu Evento</h2><div class="music-grid"><div class="music-card"><h4>Entrada do Noivo</h4><p>Clássico/Romântico</p></div><div class="music-card"><h4>Jantar Romântico</h4><p>MPB/Româtica</p></div><div class="music-card"><h4>Dança Aberta</h4><p>Pop Rock 80/90</p></div><div class="music-card"><h4>Pop Rock</h4><p>Anões 70/80/90</p></div><div class="music-card"><h4>Músicas Indianas</h4><p>World Music</p></div><div class="music-card"><h4>Músicas Árabes</h4><p>Middle East</p></div><div class="music-card"><h4>Clássicas</h4><p>Erudita</p></div><div class="music-card"><h4>Românticas</h4><p>Amor e Paixão</p></div></div></section><section id="musicos" class="musicians-section"><h2>🎸 Encontre seu Músico</h2><div class="filters"><select><option>Todos os gêneros</option><option>MPB</option><option>Jazz</option><option>Pop Rock</option><option>Clássica</option></select><select><option>Todos os instrumentos</option><option>Violão</option><option>Piano</option><option>Violino</option><option>Bateria</option></select></div><div class="musician-grid"><div class="musician-card"><img src="https://via.placeholder.com/200?text=Jo%C3%A3o+Silva" alt="João Silva"><h3>João Silva</h3><div class="rating">⭐ 4.8/5 (25 reviews)</div><div class="price">€150/hora</div><button>Ver Perfil</button></div><div class="musician-card"><img src="https://via.placeholder.com/200?text=Maria+Oliveira" alt="Maria Oliveira"><h3>Maria Oliveira</h3><div class="rating">⭐ 4.9/5 (32 reviews)</div><div class="price">€120/hora</div><button>Ver Perfil</button></div><div class="musician-card"><img src="https://via.placeholder.com/200?text=Pedro+Costa" alt="Pedro Costa"><h3>Pedro Costa</h3><div class="rating">⭐ 4.7/5 (18 reviews)</div><div class="price">€180/hora</div><button>Ver Perfil</button></div></div></section><section id="pagamento" class="payment-section"><h2>💳 Métodos de Pagamento</h2><div class="payment-options"><div class="payment-card"><h3>🏦 Transferência Bancária</h3><p>IBAN/BIC direto na sua conta</p></div><div class="payment-card"><h3>📱 MB Way</h3><p>Método rápido em Portugal</p></div></div></section></div></div><script>function verificarLogin(){const logado=localStorage.getItem('usuario_logado');if(!logado){window.location.href='login.html';}}function carregarNomeUsuario(){const email=localStorage.getItem('usuario_email');if(email){const nome=email.split('@')[0];document.getElementById('nome-usuario').textContent=nome;}}function sairDaConta(){localStorage.removeItem('usuario_email');localStorage.removeItem('usuario_tipo');localStorage.removeItem('usuario_logado');window.location.href='index.html';}document.addEventListener('DOMContentLoaded',function(){verificarLogin();carregarNomeUsuario();});</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Empresa - MúsicosBooking.pt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: white; padding: 1rem 2rem; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; margin: 0 1rem; transition: color 0.3s; }
+        nav a:hover { color: #D4AF37; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #D4AF37; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); border-left: 4px solid #D4AF37; }
+        .card h3 { margin-bottom: 1rem; color: #D4AF37; }
+        .btn { display: inline-block; padding: 0.75rem 1.5rem; background-color: #D4AF37; color: #1a1a1a; text-decoration: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; border: none; font-size: 1rem; font-weight: 600; }
+        .btn:hover { background-color: #b8941f; }
+        .profile-section { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
+        .profile-header { display: flex; align-items: center; margin-bottom: 2rem; }
+        .profile-img { width: 120px; height: 120px; border-radius: 50%; background: #ddd; margin-right: 2rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .profile-info h2 { color: #D4AF37; margin-bottom: 0.5rem; }
+        .profile-info p { color: #666; margin-bottom: 0.25rem; }
+        footer { background-color: #1a1a1a; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        footer a { color: #D4AF37; text-decoration: none; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-box { background: #D4AF37; color: #1a1a1a; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; }
+        .stat-label { margin-top: 0.5rem; font-size: 0.9rem; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 1rem; border-radius: 8px; overflow: hidden; }
+        th { background-color: #D4AF37; color: #1a1a1a; padding: 1rem; text-align: left; font-weight: 600; }
+        td { padding: 1rem; border-bottom: 1px solid #ddd; }
+        tr:hover { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">♪ MúsicosBooking.pt</div>
+            <div>
+                <a href="index.html">Início</a>
+                <a href="#musicos">Buscar Músicos</a>
+                <a href="#contratacoes">Contratações</a>
+                <a href="#orcamentos">Orçamentos</a>
+                <a href="#logout" onclick="logout()">Sair</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Dashboard da Empresa</h1>
+        
+        <section class="profile-section">
+            <div class="profile-header">
+                <div class="profile-img">🏢</div>
+                <div class="profile-info">
+                    <h2>Eventos Premium Lda</h2>
+                    <p><strong>NIF:</strong> 123456789</p>
+                    <p><strong>Email:</strong> contato@eventospremium.pt</p>
+                    <p><strong>Telefone:</strong> +351 21 123 4567</p>
+                    <button class="btn">Editar Perfil</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-box">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Eventos Agendados</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Músicos Contratados</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">€3,450</div>
+                <div class="stat-label">Total Investido</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Orçamentos Pendentes</div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="card">
+                <h3>🔍 Buscar Músicos</h3>
+                <p>Encontre os melhores profissionais para seu evento.</p>
+                <button class="btn">Buscar Agora</button>
+            </div>
+            <div class="card">
+                <h3>📅 Próximos Eventos</h3>
+                <p>Você tem 3 eventos esta semana.</p>
+                <button class="btn">Ver Calendário</button>
+            </div>
+            <div class="card">
+                <h3>💰 Orçamentos</h3>
+                <p>5 propostas aguardando análise.</p>
+                <button class="btn">Analisar</button>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <h3>Contratações Recentes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Músico</th>
+                        <th>Tipo de Evento</th>
+                        <th>Status</th>
+                        <th>Valor</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>20 Fev 2026</td>
+                        <td>João Silva - Guitarrista</td>
+                        <td>Casamento</td>
+                        <td>Confirmado</td>
+                        <td>€350</td>
+                        <td><a href="#" style="color: #D4AF37;">Ver Detalhes</a></td>
+                    </tr>
+                    <tr>
+                        <td>25 Fev 2026</td>
+                        <td>Maria Santos - Pianista</td>
+                        <td>Evento Corporativo</td>
+                        <td>Confirmado</td>
+                        <td>€500</td>
+                        <td><a href="#" style="color: #D4AF37;">Ver Detalhes</a></td>
+                    </tr>
+                    <tr>
+                        <td>01 Mar 2026</td>
+                        <td>Band Jazz Trio</td>
+                        <td>Jantar de Gala</td>
+                        <td>Aguardando</td>
+                        <td>€800</td>
+                        <td><a href="#" style="color: #D4AF37;">Confirmar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
+        <p>
+            <a href="#">Contacto</a> | 
+            <a href="#">Privacidade</a> | 
+            <a href="#">Termos</a>
+        </p>
+    </footer>
+
+    <script>
+        function logout() {
+            alert('Logout será implementado com Firebase Authentication');
+        }
+    </script>
+</body>
+</html>
