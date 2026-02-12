@@ -5,170 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Músico - MúsicosBooking.pt</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background: linear-gradient(135deg, #D4AF37 0%, #1a1a1a 100%);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 1rem;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: #ffd700;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #D4AF37;
-        }
-        .card h3 {
-            margin-bottom: 1rem;
-            color: #D4AF37;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: #D4AF37;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border: none;
-            font-size: 1rem;
-        }
-        .btn:hover {
-            background-color: #1a1a1a;
-        }
-        .btn-secondary {
-            background-color: #ffd700;
-            color: #333;
-        }
-        .btn-secondary:hover {
-            background-color: #ffed4e;
-        }
-        .profile-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #ddd;
-            margin-right: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .profile-info h2 {
-            color: #D4AF37;
-            margin-bottom: 0.5rem;
-        }
-        .profile-info p {
-            color: #666;
-            margin-bottom: 0.25rem;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-        footer a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-box {
-            background: #D4AF37;
-            color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        .stat-label {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            margin-top: 1rem;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th {
-            background-color: #D4AF37;
-            color: white;
-            padding: 1rem;
-            text-align: left;
-        }
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid #ddd;
-        }
-        tr:hover {
-            background-color: #f9f9f9;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #D4AF37 0%, #1a1a1a 100%); color: white; padding: 1rem 2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; margin: 0 1rem; transition: color 0.3s; cursor: pointer; }
+        nav a:hover { color: #D4AF37; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #D4AF37; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .welcome-section { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; }
+        .profile-img-container { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: #eee; border: 3px solid #D4AF37; position: relative; }
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: #D4AF37; color: #1a1a1a; padding: 1.5rem; border-radius: 8px; text-align: center; transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card h3 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+        .card h2 { color: #D4AF37; margin-bottom: 1rem; border-bottom: 2px solid #f5f5f5; padding-bottom: 0.5rem; }
+        .btn-gold { background: #D4AF37; color: #1a1a1a; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-gold:hover { background: #b8941f; }
+        
+        /* Modal Style */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); overflow-y: auto; }
+        .modal-content { background: white; margin: 5% auto; padding: 2rem; border-radius: 8px; width: 80%; max-width: 800px; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 0.3rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; }
+        
+        .empty-state { text-align: center; color: #666; padding: 2rem; }
+        footer { background: #1a1a1a; color: white; text-align: center; padding: 2rem; margin-top: 4rem; }
     </style>
 </head>
 <body>
@@ -176,135 +42,158 @@
         <nav>
             <div class="logo">♪ MúsicosBooking.pt</div>
             <div>
-                <a href="index.html">Início</a>
-                <a href="#profile">Perfil</a>
-                <a href="#bookings">Bookings</a>
-                <a href="#earnings">Ganhos</a>
-                <a href="#logout" onclick="logout()">Sair</a>
+                <a onclick="showSection('dashboard')">Início</a>
+                <a onclick="openModal('profileModal')">Perfil</a>
+                <a onclick="showSection('bookings')">Bookings</a>
+                <a onclick="showSection('earnings')">Ganhos</a>
+                <a onclick="logout()">Sair</a>
             </div>
         </nav>
     </header>
 
-    <main class="container">
-        <h1>Dashboard do Músico</h1>
-        
-        <section class="profile-section">
-            <div class="profile-header">
-                <div class="profile-img">
-                    <img src="musician-placeholder.jpg" alt="Foto do perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+    <div class="container" id="mainContent">
+        <section id="dashboardSection">
+            <div class="welcome-section">
+                <div class="profile-img-container">
+                    <img id="displayProfileImg" src="https://via.placeholder.com/150" alt="Foto">
                 </div>
-                <div class="profile-info">
-                    <h2>João Silva</h2>
-                    <p><strong>Especialidade:</strong> Violão Clássico</p>
-                    <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (4.8/5)</p>
-                    <p><strong>Experiência:</strong> 8 anos</p>
-                    <button class="btn btn-secondary">Editar Perfil</button>
+                <div>
+                    <h1 id="welcomeText">Bem-vindo, Músico</h1>
+                    <p id="profileSpecialty">Complete o seu perfil para começar a receber propostas.</p>
+                    <button class="btn-gold" onclick="openModal('profileModal')" style="margin-top: 1rem;">Editar Perfil</button>
                 </div>
             </div>
-        </section>
 
-        <section class="stats">
-            <div class="stat-box">
-                <div class="stat-number">12</div>
-                <div class="stat-label">Bookings Este Mês</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="statBookings">0</h3>
+                    <p>Bookings Este Mês</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statEarnings">€0,00</h3>
+                    <p>Ganhos Este Mês</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statRating">0.0</h3>
+                    <p>Rating Médio</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statViews">0</h3>
+                    <p>Perfil Views</p>
+                </div>
             </div>
-            <div class="stat-box">
-                <div class="stat-number">€1,280</div>
-                <div class="stat-label">Ganhos Este Mês</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">4.8</div>
-                <div class="stat-label">Rating Médio</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">156</div>
-                <div class="stat-label">Perfil Views</div>
-            </div>
-        </section>
 
-        <section class="dashboard-grid">
-            <div class="card">
-                <h3>📅 Próximos Bookings</h3>
-                <p>Você tem 3 bookings agendados para esta semana.</p>
-                <button class="btn">Ver Bookings</button>
-            </div>
-            <div class="card">
-                <h3>💰 Pagamentos Pendentes</h3>
-                <p>Total a receber: €450,00</p>
-                <button class="btn">Ver Faturação</button>
-            </div>
-            <div class="card">
-                <h3>📊 Desempenho</h3>
-                <p>Taxa de aceitação: 92%</p>
-                <button class="btn">Análise Detalhada</button>
+            <div class="dashboard-grid">
+                <div class="left-col">
+                    <div class="card">
+                        <h2>📅 Calendário de Eventos</h2>
+                        <div id="calendar" class="empty-state">Sem eventos agendados.</div>
+                    </div>
+                    <div class="card">
+                        <h2>⭐ Avaliações dos Contratantes</h2>
+                        <div id="reviewsList" class="empty-state">Ainda não recebeu avaliações.</div>
+                    </div>
+                </div>
+                <div class="right-col">
+                    <div class="card">
+                        <h2>🔔 Notificações</h2>
+                        <div class="empty-state">Sem notificações novas.</div>
+                    </div>
+                    <div class="card">
+                        <h2>💬 Feedback Plataforma</h2>
+                        <p>A sua opinião é importante para nós.</p>
+                        <button class="btn-gold" onclick="openModal('feedbackModal')" style="width: 100%; margin-top: 1rem;">Avaliar Plataforma</button>
+                    </div>
+                </div>
             </div>
         </section>
+    </div>
 
-        <section class="profile-section">
-            <h3>Bookings Recentes</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Cliente</th>
-                        <th>Tipo de Evento</th>
-                        <th>Status</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>15 Jan 2024</td>
-                        <td>ABC Eventos</td>
-                        <td>Casamento</td>
-                        <td>Confirmado</td>
-                        <td><a href="#" style="color: #D4AF37;">Ver Detalhes</a></td>
-                    </tr>
-                    <tr>
-                        <td>22 Jan 2024</td>
-                        <td>Hotel Luxo</td>
-                        <td>Evento Corporativo</td>
-                        <td>Confirmado</td>
-                        <td><a href="#" style="color: #D4AF37;">Ver Detalhes</a></td>
-                    </tr>
-                    <tr>
-                        <td>28 Jan 2024</td>
-                        <td>Restaurante Fino</td>
-                        <td>Jantar ao Vivo</td>
-                        <td>Pendente</td>
-                        <td><a href="#" style="color: #D4AF37;">Aceitar/Rejeitar</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <h2>Editar Perfil Profissional</h2>
+            <hr style="margin: 1rem 0;">
+            <form id="profileForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="editNome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Nascimento</label>
+                        <input type="date" id="editNasc" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Especialidade Musical</label>
+                    <input type="text" id="editEspecialidade" placeholder="Ex: Violão Clássico, Banda de Rock">
+                </div>
+                <div class="form-group">
+                    <label>Biografia</label>
+                    <textarea id="editBio" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Cachê Médio por Evento (€)</label>
+                    <input type="number" id="editCache">
+                </div>
+                <h3>Redes Sociais</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group"><label>Instagram</label><input type="text" id="editInsta"></div>
+                    <div class="form-group"><label>YouTube</label><input type="text" id="editYoutube"></div>
+                </div>
+                <div style="margin-top: 1.5rem; text-align: right;">
+                    <button type="button" class="btn-gold" style="background:#666; color:white;" onclick="closeModal('profileModal')">Cancelar</button>
+                    <button type="submit" class="btn-gold">Guardar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <footer>
-        <p>&copy; 2024 MúsicosBooking.pt. Todos os direitos reservados.</p>
-        <p>
-            <a href="#">Contacto</a> | 
-            <a href="#">Privacidade</a> | 
-            <a href="#">Termos</a>
-        </p>
+        <p>&copy; 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
+        <p><a href="#" style="color:#D4AF37;">Contacto</a> | <a href="#" style="color:#D4AF37;">Privacidade</a> | <a href="#" style="color:#D4AF37;">Termos</a></p>
     </footer>
 
     <script>
-        // Placeholder para funcionalidades de autenticação e interações
+        function loadData() {
+            const nome = localStorage.getItem('usuario_nome') || 'Músico';
+            const especialidade = localStorage.getItem('musico_especialidade') || 'Complete o seu perfil';
+            
+            document.getElementById('welcomeText').innerText = 'Bem-vindo, ' + nome;
+            document.getElementById('profileSpecialty').innerText = especialidade;
+            
+            // Pre-fill form
+            document.getElementById('editNome').value = localStorage.getItem('usuario_nome') || '';
+            document.getElementById('editEspecialidade').value = localStorage.getItem('musico_especialidade') || '';
+            document.getElementById('editBio').value = localStorage.getItem('musico_bio') || '';
+            document.getElementById('editCache').value = localStorage.getItem('musico_cache') || '';
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        document.getElementById('profileForm').onsubmit = function(e) {
+            e.preventDefault();
+            localStorage.setItem('usuario_nome', document.getElementById('editNome').value);
+            localStorage.setItem('musico_especialidade', document.getElementById('editEspecialidade').value);
+            localStorage.setItem('musico_bio', document.getElementById('editBio').value);
+            localStorage.setItem('musico_cache', document.getElementById('editCache').value);
+            loadData();
+            closeModal('profileModal');
+            alert('Perfil atualizado com sucesso!');
+        };
+
         function logout() {
-            // TODO: Implementar lógica de logout
-            alert('Função de logout será implementada');
-            // Redirecionar para página de login: window.location.href = 'login.html';
+            localStorage.clear();
+            window.location.href = 'index.html';
         }
-        
-        function acceptBooking(bookingId) {
-            // TODO: Implementar aceitação de booking via API
-            console.log('Aceitar booking:', bookingId);
+
+        function showSection(name) {
+            alert('A funcionalidade ' + name + ' será integrada com o banco de dados em breve.');
         }
-        
-        function rejectBooking(bookingId) {
-            // TODO: Implementar rejeição de booking via API
-            console.log('Rejeitar booking:', bookingId);
-        }
+
+        window.onload = loadData;
     </script>
 </body>
 </html>
