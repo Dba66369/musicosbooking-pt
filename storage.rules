@@ -1,0 +1,72 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Função auxiliar: verificar autenticação
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Função auxiliar: verificar tamanho do ficheiro (max 5MB)
+    function isValidSize() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
+    // Função auxiliar: verificar tipo de ficheiro
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isValidDocumentType() {
+      return request.resource.contentType.matches('(image/.*|application/pdf)');
+    }
+
+    // FOTOS DE PERFIL
+    match /perfis/{userId}/{fileName} {
+      allow read: if true; // Público
+      allow write: if isAuthenticated() &&
+        request.auth.uid == userId &&
+        isValidImageType() &&
+        isValidSize();
+    }
+
+    // FOTOS DE PORTFÓLIO (músicos)
+    match /portfolio/{musicoId}/{fileName} {
+      allow read: if true; // Público
+      allow write: if isAuthenticated() &&
+        request.auth.uid == musicoId &&
+        isValidImageType() &&
+        isValidSize();
+    }
+
+    // COMPROVATIVOS DE PAGAMENTO
+    match /comprovativos/{empresaId}/{fileName} {
+      // Ler: apenas próprio utilizador ou admin
+      allow read: if isAuthenticated() && request.auth.uid == empresaId;
+
+      // Escrever: apenas próprio utilizador, documentos válidos
+      allow write: if isAuthenticated() &&
+        request.auth.uid == empresaId &&
+        isValidDocumentType() &&
+        isValidSize();
+
+      // Eliminar: nunca (manter para auditoria)
+      allow delete: if false;
+    }
+
+    // DOCUMENTOS GERAIS (contratos, faturas)
+    match /documentos/{userId}/{fileName} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() &&
+        request.auth.uid == userId &&
+        isValidDocumentType() &&
+        isValidSize();
+      allow delete: if false;
+    }
+
+    // Bloquear qualquer outro acesso
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
