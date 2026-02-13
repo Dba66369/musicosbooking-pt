@@ -1,333 +1,390 @@
-// js/auth.js - Sistema de Autenticação Firebase - MúsicosBooking.pt
-// TAREFA 1.2 - Implementar Firebase Auth Real
+// js/auth.js - Sistema de Autenticação Firebase Completo
+// DIA 1 - Implementação conforme especificado pelo Claude
 
-/**
- * Sistema de Autenticação completo com Firebase
- * - Login/Logout
- * - Registo de utilizadores
- * - Recuperação de password
- * - Gestão de sessão
- * - Persistência de estado de autenticação
- */
+import { auth, db } from './firebase.js';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+    onAuthStateChanged,
+    updateProfile
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+import {
+    doc,
+    setDoc,
+    getDoc,
+    updateDoc,
+    deleteDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+    serverTimestamp,
+    increment
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+import { ADMIN_EMAIL, SECURITY_CONFIG } from './config/firebase.config.js';
+
+// ============================================
+// SISTEMA DE AUTENTICAÇÃO COMPLETO
+// ============================================
 
 class AuthSystem {
     constructor() {
-        this.auth = null;
-        this.db = null;
         this.currentUser = null;
-        this.authStateListeners = [];
-        this.initialized = false;
+        this.loginAttempts = new Map();
     }
 
-    /**
-     * Inicializa o sistema de autenticação
-     * @param {Object} firebaseAuth - Instância do Firebase Auth
-     * @param {Object} firestore - Instância do Firestore
-     */
-    async initialize(firebaseAuth, firestore) {
+    // ============================================
+    // REGISTO DE UTILIZADOR
+    // ============================================
+    async register(email, password, userType, additionalData = {}) {
         try {
-            this.auth = firebaseAuth;
-            this.db = firestore;
+            // 1. Validar dados
+            this.validateEmail(email);
+            this.validatePassword(password);
 
-            // Observer de mudança de estado de autenticação
-            this.auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    // Utilizador autenticado
-                    await this.handleAuthStateChange(user);
-                } else {
-                    // Utilizador não autenticado
-                    this.currentUser = null;
-                    this.notifyListeners(null);
+            if (!['musician', 'company'].includes(userType)) {
+                throw new Error('Tipo de utilizador inválido');
+            }
+
+            // 2. Verificar se email já existe
+            const emailExists = await this.checkEmailExists(email);
+            if (emailExists) {
+                throw new Error('Este email já está registado. Use outro ou faça login.');
+            }
+
+            // 3. Criar utilizador no Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // 4. Criar documento do utilizador no Firestore
+            await setDoc(doc(db, 'users', user.uid), {
+                uid: user.uid,
+                email: email.toLowerCase(),
+                emailVerified: false,
+                userType: userType,
+                createdAt: serverTimestamp(),
+                lastLogin: serverTimestamp(),
+                status: 'active',
+                profile: {
+                    name: additionalData.name || '',
+                    phone: additionalData.phone || '',
+                    city: additionalData.city || ''
                 }
             });
 
-            this.initialized = true;
-            console.log('✅ Sistema de autenticação inicializado');
-        } catch (error) {
-            console.error('❌ Erro ao inicializar sistema de autenticação:', error);
-            throw error;
-        }
-    }
-
-    /**
-     * Handle quando o estado de autenticação muda
-     */
-    async handleAuthStateChange(firebaseUser) {
-        try {
-            // Busca dados adicionais do utilizador no Firestore
-            const userDoc = await this.db.collection('users').doc(firebaseUser.uid).get();
-            
-            if (userDoc.exists) {
-                this.currentUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    emailVerified: firebaseUser.emailVerified,
-                    ...userDoc.data()
-                };
+            // 5. Criar documento específico (musician ou company)
+            if (userType === 'musician') {
+                await setDoc(doc(db, 'musicians', user.uid), {
+                    userId: user.uid,
+                    bio: '',
+                    specialty: additionalData.specialty || '',
+                    experience: 0,
+                    pricePerEvent: 0,
+                    photo: '',
+                    social: {
+                        instagram: '',
+                        facebook: '',
+                        youtube: '',
+                        soundcloud: '',
+                        website: ''
+                    },
+                    stats: {
+                        totalBookings: 0,
+                        totalEarnings: 0,
+                        avgRating: 0,
+                        totalReviews: 0
+                    },
+                    createdAt: serverTimestamp()
+                });
             } else {
-                // Se não existir no Firestore, cria registo básico
-                this.currentUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    emailVerified: firebaseUser.emailVerified
-                };
+                await setDoc(doc(db, 'companies', user.uid), {
+                    userId: user.uid,
+                    companyName: additionalData.companyName || '',
+                    nif: additionalData.nif || '',
+                    address: additionalData.address || '',
+                    createdAt: serverTimestamp()
+                });
             }
 
-            this.notifyListeners(this.currentUser);
+            // 6. Enviar email de verificação
+            await sendEmailVerification(user);
+
+            // 7. Registar log de registo
+            await this.logActivity('user_registered', user.uid, {
+                email: email,
+                userType: userType
+            });
+
+            // 8. Notificar admin (via Cloud Function)
+            await this.notifyAdminNewUser(user.uid, email, userType);
+
+            return {
+                success: true,
+                user: user,
+                message: 'Registo efetuado com sucesso! Verifique o seu email para ativar a conta.'
+            };
+
         } catch (error) {
-            console.error('Erro ao carregar dados do utilizador:', error);
+            console.error('Erro no registo:', error);
+            throw this.handleAuthError(error);
         }
     }
 
-    /**
-     * Login com email e password
-     */
-    async login(email, password, rememberMe = false) {
+    // ============================================
+    // LOGIN
+    // ============================================
+    async login(email, password) {
         try {
-            // Validação de inputs
-            if (!email || !password) {
-                throw new Error('Email e password são obrigatórios');
+            // 1. Verificar rate limiting
+            if (this.isLockedOut(email)) {
+                throw new Error(`Muitas tentativas falhadas. Tente novamente em ${this.getLockoutTime(email)} minutos.`);
             }
 
-            // Persistência de sessão
-            const persistence = rememberMe 
-                ? this.auth.Auth.Persistence.LOCAL 
-                : this.auth.Auth.Persistence.SESSION;
-            
-            await this.auth.setPersistence(persistence);
+            // 2. Validar dados
+            this.validateEmail(email);
 
-            // Autentica com Firebase
-            const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
+            // 3. Fazer login
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Busca dados do utilizador
-            const userDoc = await this.db.collection('users').doc(user.uid).get();
-            
-            if (!userDoc.exists) {
-                throw new Error('Dados do utilizador não encontrados');
+            // 4. Verificar se email foi verificado
+            if (SECURITY_CONFIG.requireEmailVerification && !user.emailVerified) {
+                await signOut(auth);
+                throw new Error('Por favor, verifique o seu email antes de fazer login. Verifique a caixa de spam.');
+            }
+
+            // 5. Buscar dados do utilizador
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+
+            if (!userDoc.exists()) {
+                throw new Error('Dados do utilizador não encontrados.');
             }
 
             const userData = userDoc.data();
 
-            // Atualiza último login
-            await this.db.collection('users').doc(user.uid).update({
-                lastLogin: new Date(),
-                lastLoginIP: await this.getClientIP()
+            // 6. Atualizar último login
+            await updateDoc(doc(db, 'users', user.uid), {
+                lastLogin: serverTimestamp()
             });
 
-            console.log('✅ Login realizado com sucesso');
-            
+            // 7. Limpar tentativas de login
+            this.loginAttempts.delete(email);
+
             return {
                 success: true,
                 user: user,
-                userData: userData
+                userData: userData,
+                userType: userData.userType
             };
+
         } catch (error) {
-            console.error('❌ Erro no login:', error);
-            
-            // Mensagens de erro amigáveis
-            let errorMessage = 'Erro ao fazer login';
-            
-            switch (error.code) {
-                case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                    errorMessage = 'Email ou password incorretos';
-                    break;
-                case 'auth/invalid-email':
-                    errorMessage = 'Email inválido';
-                    break;
-                case 'auth/user-disabled':
-                    errorMessage = 'Esta conta foi desativada';
-                    break;
-                case 'auth/too-many-requests':
-                    errorMessage = 'Demasiadas tentativas. Tente novamente mais tarde';
-                    break;
-                default:
-                    errorMessage = error.message;
-            }
-            
-            throw new Error(errorMessage);
+            // Incrementar tentativas falhadas
+            this.recordFailedLogin(email);
+            throw this.handleAuthError(error);
         }
     }
 
-    /**
-     * Registo de novo utilizador
-     */
-    async register(email, password, userData) {
-        try {
-            // Validação
-            if (!email || !password) {
-                throw new Error('Email e password são obrigatórios');
-            }
-
-            if (password.length < 6) {
-                throw new Error('Password deve ter pelo menos 6 caracteres');
-            }
-
-            if (!userData.nome || !userData.tipo) {
-                throw new Error('Nome e tipo de utilizador são obrigatórios');
-            }
-
-            // Cria utilizador no Firebase Auth
-            const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-
-            // Cria documento do utilizador no Firestore
-            await this.db.collection('users').doc(user.uid).set({
-                email: email,
-                nome: userData.nome,
-                tipo: userData.tipo, // 'musico' ou 'empresa'
-                telefone: userData.telefone || '',
-                createdAt: new Date(),
-                emailVerified: false,
-                active: true,
-                lastLogin: new Date()
-            });
-
-            // Envia email de verificação
-            await user.sendEmailVerification();
-
-            console.log('✅ Utilizador registado com sucesso');
-            
-            return {
-                success: true,
-                user: user,
-                message: 'Registo realizado! Verifique o seu email.'
-            };
-        } catch (error) {
-            console.error('❌ Erro no registo:', error);
-            
-            let errorMessage = 'Erro ao registar utilizador';
-            
-            switch (error.code) {
-                case 'auth/email-already-in-use':
-                    errorMessage = 'Este email já está registado';
-                    break;
-                case 'auth/invalid-email':
-                    errorMessage = 'Email inválido';
-                    break;
-                case 'auth/weak-password':
-                    errorMessage = 'Password demasiado fraca';
-                    break;
-                default:
-                    errorMessage = error.message;
-            }
-            
-            throw new Error(errorMessage);
-        }
-    }
-
-    /**
-     * Logout
-     */
+    // ============================================
+    // LOGOUT
+    // ============================================
     async logout() {
         try {
-            await this.auth.signOut();
+            await signOut(auth);
             this.currentUser = null;
-            console.log('✅ Logout realizado');
             return { success: true };
         } catch (error) {
-            console.error('❌ Erro no logout:', error);
             throw new Error('Erro ao fazer logout');
         }
     }
 
-    /**
-     * Recuperar password
-     */
-    async recuperarPassword(email) {
+    // ============================================
+    // RECUPERAR PASSWORD
+    // ============================================
+    async recoverPassword(email) {
         try {
-            if (!email) {
-                throw new Error('Email é obrigatório');
-            }
-
-            await this.auth.sendPasswordResetEmail(email);
-            
-            console.log('✅ Email de recuperação enviado');
+            this.validateEmail(email);
+            await sendPasswordResetEmail(auth, email);
             return {
                 success: true,
                 message: 'Email de recuperação enviado com sucesso'
             };
         } catch (error) {
-            console.error('❌ Erro ao recuperar password:', error);
-            
-            let errorMessage = 'Erro ao enviar email de recuperação';
-            
-            if (error.code === 'auth/user-not-found') {
-                errorMessage = 'Email não encontrado';
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = 'Email inválido';
-            }
-            
-            throw new Error(errorMessage);
+            throw this.handleAuthError(error);
         }
     }
 
-    /**
-     * Verifica se utilizador está autenticado
-     */
-    isAuthenticated() {
-        return this.currentUser !== null;
+    // ============================================
+    // VALIDAÇÕES
+    // ============================================
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+            throw new Error('Email inválido');
+        }
     }
 
-    /**
-     * Obtém utilizador atual
-     */
-    getCurrentUser() {
-        return this.currentUser;
+    validatePassword(password) {
+        if (!password || password.length < SECURITY_CONFIG.passwordMinLength) {
+            throw new Error(`Password deve ter pelo menos ${SECURITY_CONFIG.passwordMinLength} caracteres`);
+        }
     }
 
-    /**
-     * Adiciona listener de mudança de estado
-     */
+    // ============================================
+    // VERIFICAR EMAIL DUPLICADO
+    // ============================================
+    async checkEmailExists(email) {
+        try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('email', '==', email.toLowerCase()));
+            const querySnapshot = await getDocs(q);
+            return !querySnapshot.empty;
+        } catch (error) {
+            console.error('Erro ao verificar email:', error);
+            return false;
+        }
+    }
+
+    // ============================================
+    // RATE LIMITING
+    // ============================================
+    recordFailedLogin(email) {
+        const attempts = this.loginAttempts.get(email) || { count: 0, timestamp: Date.now() };
+        attempts.count++;
+        attempts.timestamp = Date.now();
+        this.loginAttempts.set(email, attempts);
+    }
+
+    isLockedOut(email) {
+        const attempts = this.loginAttempts.get(email);
+        if (!attempts) return false;
+
+        const timeSinceLastAttempt = Date.now() - attempts.timestamp;
+        const lockoutExpired = timeSinceLastAttempt > SECURITY_CONFIG.lockoutDuration;
+
+        if (lockoutExpired) {
+            this.loginAttempts.delete(email);
+            return false;
+        }
+
+        return attempts.count >= SECURITY_CONFIG.maxLoginAttempts;
+    }
+
+    getLockoutTime(email) {
+        const attempts = this.loginAttempts.get(email);
+        if (!attempts) return 0;
+
+        const timeSinceLastAttempt = Date.now() - attempts.timestamp;
+        const remainingTime = SECURITY_CONFIG.lockoutDuration - timeSinceLastAttempt;
+        return Math.ceil(remainingTime / 60000); // Minutos
+    }
+
+    // ============================================
+    // LOGGING
+    // ============================================
+    async logActivity(type, userId, metadata = {}) {
+        try {
+            await setDoc(doc(collection(db, 'admin_logs')), {
+                type: type,
+                userId: userId,
+                timestamp: serverTimestamp(),
+                metadata: metadata
+            });
+        } catch (error) {
+            console.error('Erro ao registar log:', error);
+        }
+    }
+
+    // ============================================
+    // NOTIFICAÇÕES ADMIN
+    // ============================================
+    async notifyAdminNewUser(userId, email, userType) {
+        try {
+            // Esta função será implementada com Cloud Functions
+            // Por agora, apenas registamos no Firestore
+            await setDoc(doc(collection(db, 'admin_notifications')), {
+                type: 'new_user',
+                userId: userId,
+                email: email,
+                userType: userType,
+                read: false,
+                createdAt: serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Erro ao notificar admin:', error);
+        }
+    }
+
+    // ============================================
+    // GESTÃO DE ERROS
+    // ============================================
+    handleAuthError(error) {
+        console.error('Auth Error:', error);
+
+        const errorMessages = {
+            'auth/email-already-in-use': 'Este email já está registado',
+            'auth/invalid-email': 'Email inválido',
+            'auth/weak-password': 'Password demasiado fraca',
+            'auth/user-not-found': 'Email ou password incorretos',
+            'auth/wrong-password': 'Email ou password incorretos',
+            'auth/user-disabled': 'Esta conta foi desativada',
+            'auth/too-many-requests': 'Demasiadas tentativas. Tente novamente mais tarde',
+            'auth/network-request-failed': 'Erro de conexão. Verifique a sua internet'
+        };
+
+        const message = errorMessages[error.code] || error.message || 'Erro desconhecido';
+        return new Error(message);
+    }
+
+    // ============================================
+    // OBSERVER DE ESTADO
+    // ============================================
     onAuthStateChange(callback) {
-        this.authStateListeners.push(callback);
-        
-        // Chama callback imediatamente se já houver utilizador
-        if (this.currentUser) {
-            callback(this.currentUser);
-        }
-    }
-
-    /**
-     * Notifica todos os listeners
-     */
-    notifyListeners(user) {
-        this.authStateListeners.forEach(callback => {
-            try {
-                callback(user);
-            } catch (error) {
-                console.error('Erro no listener de autenticação:', error);
+        return onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    this.currentUser = {
+                        uid: user.uid,
+                        email: user.email,
+                        emailVerified: user.emailVerified,
+                        ...userDoc.data()
+                    };
+                    callback(this.currentUser);
+                } else {
+                    callback(null);
+                }
+            } else {
+                this.currentUser = null;
+                callback(null);
             }
         });
     }
 
-    /**
-     * Obtém IP do cliente (se disponível)
-     */
-    async getClientIP() {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            return data.ip;
-        } catch (error) {
-            return 'unknown';
-        }
+    // ============================================
+    // GETTERS
+    // ============================================
+    getCurrentUser() {
+        return this.currentUser;
     }
 
-    /**
-     * Verifica tipo de utilizador
-     */
-    isMusico() {
-        return this.currentUser && this.currentUser.tipo === 'musico';
+    isAuthenticated() {
+        return this.currentUser !== null && this.currentUser.emailVerified;
     }
 
-    isSempresa() {
-        return this.currentUser && this.currentUser.tipo === 'empresa';
+    isMusician() {
+        return this.currentUser && this.currentUser.userType === 'musician';
+    }
+
+    isCompany() {
+        return this.currentUser && this.currentUser.userType === 'company';
     }
 }
 
-// Exporta instância global
+// Exportar instância global
 window.authSystem = new AuthSystem();
-
-console.log('📦 Auth System carregado');
+console.log('✅ Auth System carregado e pronto');
