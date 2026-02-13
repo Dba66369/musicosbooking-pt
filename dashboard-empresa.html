@@ -6,166 +6,104 @@
     <title>Dashboard Empresa - MúsicosBooking.pt</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; line-height: 1.6; }
-        header { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: white; padding: 1rem 2rem; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; }
+        header { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: white; padding: 1rem 2rem; }
         nav { display: flex; justify-content: space-between; align-items: center; }
-        nav a { color: white; text-decoration: none; margin: 0 1rem; transition: color 0.3s; cursor: pointer; }
-        nav a:hover { color: #D4AF37; }
+        nav a { color: white; text-decoration: none; margin: 0 1rem; cursor: pointer; }
         .logo { font-size: 1.5rem; font-weight: bold; color: #D4AF37; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); border-left: 4px solid #D4AF37; }
-        .card h3 { margin-bottom: 1rem; color: #D4AF37; }
-        .btn { display: inline-block; padding: 0.75rem 1.5rem; background-color: #D4AF37; color: #1a1a1a; text-decoration: none; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; font-size: 1rem; font-weight: 600; }
-        .btn:hover { background-color: #b8941f; }
-        .profile-section { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
-        .profile-header { display: flex; align-items: center; margin-bottom: 2rem; }
-        .profile-img { width: 120px; height: 120px; border-radius: 50%; background: #ddd; margin-right: 2rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid #D4AF37; }
-        .profile-info h2 { color: #D4AF37; margin-bottom: 0.5rem; }
-        .profile-info p { color: #666; margin-bottom: 0.25rem; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .stat-box { background: #D4AF37; color: #1a1a1a; padding: 1.5rem; border-radius: 8px; text-align: center; }
-        .stat-number { font-size: 2rem; font-weight: bold; }
-        .stat-label { margin-top: 0.5rem; font-size: 0.9rem; }
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 1rem; border-radius: 8px; overflow: hidden; }
-        th { background-color: #D4AF37; color: #1a1a1a; padding: 1rem; text-align: left; font-weight: 600; }
-        td { padding: 1rem; border-bottom: 1px solid #ddd; }
+        .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .btn-gold { background: #D4AF37; color: #1a1a1a; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
         .modal-content { background: white; margin: 10% auto; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px; }
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; }
-        footer { background-color: #1a1a1a; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
-        footer a { color: #D4AF37; text-decoration: none; margin: 0 0.5rem; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; }
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">♪ MúsicosBooking.pt</div>
+            <div class="logo">MúsicosBooking.pt</div>
             <div>
-                <a href="index.html">Início</a>
-                <a onclick="alert('Funcionalidade em desenvolvimento')">Buscar Músicos</a>
-                <a onclick="alert('Funcionalidade em desenvolvimento')">Contratações</a>
-                <a onclick="logout()">Sair</a>
+                <a onclick="location.reload()">Início</a>
+                <a onclick="openModal('profileModal')">Perfil</a>
+                <a onclick="window.authSystem.logout().then(() => window.location.href='index.html')">Sair</a>
             </div>
         </nav>
     </header>
-    <main class="container">
-        <h1>Dashboard da Empresa</h1>
-        <section class="profile-section">
-            <div class="profile-header">
-                <div class="profile-img">🏢</div>
-                <div class="profile-info">
-                    <h2 id="companyNameDisplay">Carregando...</h2>
-                    <p><strong>NIF:</strong> <span id="nifDisplay">---</span></p>
-                    <p><strong>Email:</strong> <span id="emailDisplay">---</span></p>
-                    <p><strong>Telefone:</strong> <span id="phoneDisplay">---</span></p>
-                    <button class="btn" onclick="openModal()">Editar Perfil</button>
-                </div>
-            </div>
-        </section>
-        <section class="stats">
-            <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Eventos Agendados</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Músicos Contratados</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">€0</div>
-                <div class="stat-label">Total Investido</div>
-            </div>
-        </section>
-        <section class="dashboard-grid">
-            <div class="card">
-                <h3>🔍 Buscar Músicos</h3>
-                <p>Encontre os melhores profissionais para seu evento.</p>
-                <button class="btn" onclick="location.href='musicos.html'">Buscar Agora</button>
-            </div>
-            <div class="card">
-                <h3>📅 Próximos Eventos</h3>
-                <p>Gerencie sua agenda de eventos culturais.</p>
-                <button class="btn" onclick="location.href='eventos.html'">Ver Calendário</button>
-            </div>
-        </section>
-    </main>
-    <div id="editModal" class="modal">
+
+    <div class="container">
+        <div class="card">
+            <h1 id="companyWelcome">Bem-vinda, Empresa</h1>
+            <p id="companyDetails">A carregar...</p>
+            <button class="btn-gold" onclick="openModal('profileModal')" style="margin-top:1rem">Editar Perfil</button>
+        </div>
+
+        <div class="card">
+            <h2>Os Meus Pedidos / Bookings</h2>
+            <div id="bookingsList" style="margin-top:1rem">Sem pedidos no momento.</div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
         <div class="modal-content">
-            <h3>Editar Perfil da Empresa</h3>
-            <hr style="margin: 1rem 0;">
-            <form id="editForm">
+            <h2>Perfil da Empresa</h2>
+            <form id="profileForm">
                 <div class="form-group">
                     <label>Nome da Empresa</label>
-                    <input type="text" id="editName" required>
+                    <input type="text" id="editNome" required>
                 </div>
                 <div class="form-group">
-                    <label>NIF</label>
-                    <input type="text" id="editNif">
+                    <label>NIF (Opcional)</label>
+                    <input type="text" id="editNIF">
                 </div>
-                <div class="form-group">
-                    <label>Telefone</label>
-                    <input type="text" id="editPhone">
-                </div>
-                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button type="submit" class="btn" style="flex: 1;">Guardar</button>
-                    <button type="button" class="btn" onclick="closeModal()" style="background: #666; color: white; flex: 1;">Cancelar</button>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-gold" style="background:#ccc" onclick="closeModal('profileModal')">Cancelar</button>
+                    <button type="submit" class="btn-gold">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
-    <footer>
-        <p>© 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
-        <p>
-            <a href="contato.html">Contacto</a> | 
-            <a href="privacidade.html">Privacidade</a> | 
-            <a href="termos.html">Termos</a>
-        </p>
-    </footer>
+
     <script type="module">
         import './js/auth.js';
-        import { db, auth } from './js/firebase.js';
+        import { db } from './js/firebase.js';
         import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        async function loadCompanyData(user) {
-            try {
-                const docRef = doc(db, 'companies', user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('companyNameDisplay').innerText = data.companyName || user.profile?.name || 'Empresa';
-                    document.getElementById('nifDisplay').innerText = data.nif || 'Não definido';
-                    document.getElementById('emailDisplay').innerText = user.email;
-                    document.getElementById('phoneDisplay').innerText = user.profile?.phone || 'Não definido';
-                    document.getElementById('editName').value = data.companyName || user.profile?.name || '';
-                    document.getElementById('editNif').value = data.nif || '';
-                    document.getElementById('editPhone').value = user.profile?.phone || '';
-                }
-            } catch (error) { console.error(\"Erro ao carregar dados:\", error); }
-        }
-        window.authSystem.onAuthStateChange((user) => {
+
+        window.authSystem.onAuthStateChange(async (user) => {
             if (!user) { window.location.href = 'login.html'; return; }
-            if (user.userType !== 'company') { window.location.href = 'dashboard-musico.html'; return; }
-            loadCompanyData(user);
+            if (user.tipo !== 'company') { window.location.href = 'dashboard-musico.html'; return; }
+
+            document.getElementById('companyWelcome').innerText = `Bem-vinda, ${user.nome || 'Empresa'}`;
+            
+            const empresaDoc = await getDoc(doc(db, 'empresas', user.uid));
+            if (empresaDoc.exists()) {
+                const data = empresaDoc.data();
+                document.getElementById('companyDetails').innerText = `NIF: ${data.nif || 'Não definido'}`;
+                document.getElementById('editNome').value = user.nome || '';
+                document.getElementById('editNIF').value = data.nif || '';
+            }
         });
-        window.openModal = () => document.getElementById('editModal').style.display = 'block';
-        window.closeModal = () => document.getElementById('editModal').style.display = 'none';
-        document.getElementById('editForm').onsubmit = async (e) => {
+
+        document.getElementById('profileForm').onsubmit = async (e) => {
             e.preventDefault();
             const user = window.authSystem.getCurrentUser();
             if (!user) return;
             try {
-                const name = document.getElementById('editName').value;
-                const nif = document.getElementById('editNif').value;
-                const phone = document.getElementById('editPhone').value;
-                await updateDoc(doc(db, 'companies', user.uid), { companyName: name, nif: nif });
-                await updateDoc(doc(db, 'users', user.uid), { 'profile.name': name, 'profile.phone': phone });
-                alert('Perfil atualizado com sucesso!');
+                await updateDoc(doc(db, 'utilizadores', user.uid), {
+                    nome: document.getElementById('editNome').value
+                });
+                await updateDoc(doc(db, 'empresas', user.uid), {
+                    nif: document.getElementById('editNIF').value
+                });
+                alert('Perfil atualizado!');
                 location.reload();
-            } catch (error) { alert('Erro ao atualizar perfil: ' + error.message); }
+            } catch (error) { alert(error.message); }
         };
-        window.logout = async () => { await window.authSystem.logout(); window.location.href = 'index.html'; };
+
+        window.openModal = (id) => document.getElementById(id).style.display = 'block';
+        window.closeModal = (id) => document.getElementById(id).style.display = 'none';
     </script>
 </body>
 </html>
