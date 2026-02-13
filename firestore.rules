@@ -1,108 +1,64 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
     // Função auxiliar: verificar autenticação
     function isAuthenticated() {
       return request.auth != null;
     }
-
     // Função auxiliar: verificar se é o próprio utilizador
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
-
     // Função auxiliar: verificar se email está verificado
     function isEmailVerified() {
       return isAuthenticated() && request.auth.token.email_verified == true;
     }
-
-    // Função auxiliar: verificar tipo de utilizador
-    function isUserType(type) {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.tipo == type;
-    }
-
+    
     // UTILIZADORES
     match /users/{userId} {
-      // Ler: apenas próprio utilizador
-      allow read: if isOwner(userId);
-
-      // Criar: apenas durante registo (via Cloud Function)
-      allow create: if isAuthenticated() && isOwner(userId);
-
-      // Atualizar: apenas próprio utilizador e email verificado
-      allow update: if isOwner(userId) && isEmailVerified();
-
-      // Eliminar: nunca (usar Cloud Function)
-      allow delete: if false;
-    }
-
-    // MÚSICOS (perfis públicos)
-    match /musicos/{musicoId} {
-      // Ler: todos (catálogo público)
-      allow read: if true;
-
-      // Criar/Atualizar: apenas próprio músico com email verificado
-      allow create, update: if isOwner(musicoId) &&
-        isUserType('musico') &&
-        isEmailVerified();
-
-      // Eliminar: nunca
-      allow delete: if false;
-    }
-
-    // RESERVAS
-    match /reservas/{reservaId} {
-      // Ler: apenas músico ou empresa envolvidos
-      allow read: if isAuthenticated() && (
-        resource.data.musicoId == request.auth.uid ||
-        resource.data.empresaId == request.auth.uid
-      );
-
-      // Criar: apenas empresas com email verificado
-      allow create: if isUserType('empresa') && isEmailVerified();
-
-      // Atualizar: apenas músico (aceitar/rejeitar) ou empresa (cancelar)
-      allow update: if isAuthenticated() && (
-        (resource.data.musicoId == request.auth.uid &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])) ||
-        (resource.data.empresaId == request.auth.uid &&
-         request.resource.data.status == 'cancelada')
-      );
-
-      // Eliminar: nunca
-      allow delete: if false;
-    }
-
-    // PAGAMENTOS
-    match /pagamentos/{pagamentoId} {
-      // Ler: apenas músico ou empresa envolvidos
-      allow read: if isAuthenticated() && (
-        resource.data.musicoId == request.auth.uid ||
-        resource.data.empresaId == request.auth.uid
-      );
-
-      // Criar: apenas via Cloud Function
-      allow create: if false;
-
-      // Atualizar: apenas via Cloud Function (após validação de comprovativo)
-      allow update: if false;
-
-      // Eliminar: nunca
-      allow delete: if false;
-    }
-
-    // COMPROVATIVOS (Firebase Storage metadata)
-    match /comprovativos/{fileName} {
-      // Ler: apenas próprio utilizador
       allow read: if isAuthenticated();
-
-      // Criar: apenas utilizadores autenticados
-      allow create: if isAuthenticated() && isEmailVerified();
-
-      // Atualizar/Eliminar: nunca
-      allow update, delete: if false;
+      allow write: if isOwner(userId);
+    }
+    
+    // MÚSICOS (Nomes sincronizados com auth.js)
+    match /musicians/{musicianId} {
+      allow read: if true;
+      allow write: if isOwner(musicianId);
+    }
+    
+    // EMPRESAS (Nomes sincronizados com auth.js)
+    match /companies/{companyId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(companyId);
+    }
+    
+    // BOOKINGS / RESERVAS
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && (
+        resource.data.musicianId == request.auth.uid || 
+        resource.data.companyId == request.auth.uid
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (
+        resource.data.musicianId == request.auth.uid || 
+        resource.data.companyId == request.auth.uid
+      );
+    }
+    
+    // ADMIN NOTIFICATIONS & LOGS
+    match /admin_notifications/{id} {
+      allow read: if isAuthenticated() && request.auth.token.admin == true;
+      allow write: if false; // Apenas via Cloud Functions
+    }
+    
+    match /admin_logs/{id} {
+      allow read: if isAuthenticated() && request.auth.token.admin == true;
+      allow write: if false;
+    }
+    
+    match /monthly_reports/{id} {
+      allow read: if isAuthenticated() && request.auth.token.admin == true;
+      allow write: if false;
     }
   }
 }
