@@ -3,212 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Músicos - MúsicosBooking</title>
+    <title>Encontrar Músicos - MúsicosBooking.pt</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            line-height: 1.6;
-            background: #f5f5f5;
-        }
-        header {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #D4AF37;
-            text-decoration: none;
-        }
-        nav {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: #D4AF37;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .page-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin: 3rem 0;
-            color: #1a1a1a;
-        }
-        .musicians-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        .musician-card {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border-top: 4px solid #D4AF37;
-        }
-        .musician-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        .musician-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, #D4AF37, #b8941f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-        .musician-info {
-            padding: 1.5rem;
-        }
-        .musician-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 0.5rem;
-        }
-        .musician-specialty {
-            color: #D4AF37;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-        .musician-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.7rem 1.5rem;
-            background: #D4AF37;
-            color: #1a1a1a;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-        .btn:hover {
-            background: #b8941f;
-            transform: translateY(-2px);
-        }
-        footer {
-            background: #1a1a1a;
-            color: #fff;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; background: #f5f5f5; }
+        header { background: #1a1a1a; color: #fff; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #D4AF37; text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .musicians-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0; }
+        .musician-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #D4AF37; transition: 0.3s; }
+        .musician-image { width: 100%; height: 200px; background: linear-gradient(45deg, #eee, #ddd); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .btn { display: block; padding: 0.8rem; background: #D4AF37; color: #1a1a1a; text-decoration: none; border-radius: 6px; font-weight: bold; text-align: center; margin-top: 1rem; }
     </style>
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">🎵 MúsicosBooking</a>
         <nav>
-            <a href="index.html">Início</a>
-            <a href="#">Músicos</a>
-            <a href="contato.html">Contato</a>
+            <a href="index.html" style="color:white; margin-right:1.5rem; text-decoration:none">Início</a>
+            <a href="conta.html" style="color:white; text-decoration:none">A Minha Conta</a>
         </nav>
     </header>
 
     <div class="container">
-        <h1 class="page-title">Nossos Músicos</h1>
-        
-        <div class="musicians-grid">
-            <div class="musician-card">
-                <div class="musician-image">🎸</div>
-                <div class="musician-info">
-                    <div class="musician-name">João Silva</div>
-                    <div class="musician-specialty">Guitarrista Profissional</div>
-                    <p class="musician-description">Especialista em música clássica e contemporânea com 15 anos de experiência.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
-
-            <div class="musician-card">
-                <div class="musician-image">🎹</div>
-                <div class="musician-info">
-                    <div class="musician-name">Maria Santos</div>
-                    <div class="musician-specialty">Pianista</div>
-                    <p class="musician-description">Professora de piano com expertiácia em casamentos e eventos corporativos.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
-
-            <div class="musician-card">
-                <div class="musician-image">🎤</div>
-                <div class="musician-info">
-                    <div class="musician-name">Carlos Oliveira</div>
-                    <div class="musician-specialty">Cantor</div>
-                    <p class="musician-description">Vocalista experiente em diversos géneros musicais para todos os tipos de eventos.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
-
-            <div class="musician-card">
-                <div class="musician-image">🎺</div>
-                <div class="musician-info">
-                    <div class="musician-name">Tiago Costa</div>
-                    <div class="musician-specialty">Trompetista</div>
-                    <p class="musician-description">Especialista em jazz e música festiva com 20 anos de trajectória.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
-
-            <div class="musician-card">
-                <div class="musician-image">🎻</div>
-                <div class="musician-info">
-                    <div class="musician-name">Ana Ferreira</div>
-                    <div class="musician-specialty">Violinista</div>
-                    <p class="musician-description">Música clássica de alta qualidade para cerimónias e eventos elegantes.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
-
-            <div class="musician-card">
-                <div class="musician-image">🎧</div>
-                <div class="musician-info">
-                    <div class="musician-name">Lucas Pereira</div>
-                    <div class="musician-specialty">DJ</div>
-                    <p class="musician-description">DJ profissional com equipamento de última geração para qualquer tipo de festa.</p>
-                    <a href="checkout.html" class="btn">Agendar</a>
-                </div>
-            </div>
+        <h1 style="text-align:center; margin-bottom: 2rem;">Músicos Profissionais</h1>
+        <div id="musiciansGrid" class="musicians-grid">
+            <p>Carregando...</p>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 MúsicosBooking. Todos os direitos reservados.</p>
-    </footer>
+    <script type="module">
+        import { db } from './js/firebase.js';
+        import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        async function loadMusicians() {
+            const grid = document.getElementById('musiciansGrid');
+            const snap = await getDocs(query(collection(db, 'utilizadores'), where('tipo', '==', 'musician')));
+            grid.innerHTML = '';
+            snap.forEach(docUser => {
+                const user = docUser.data();
+                const card = document.createElement('div');
+                card.className = 'musician-card';
+                card.innerHTML = `
+                    <div class="musician-image">🎸</div>
+                    <div class="musician-info" style="padding:1.5rem">
+                        <div style="font-weight:bold; font-size:1.2rem">${user.nome || 'Artista'}</div>
+                        <a href="checkout.html?musico=${user.uid}" class="btn">Pedir Orçamento</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        loadMusicians();
+    </script>
 </body>
 </html>
