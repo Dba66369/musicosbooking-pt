@@ -1,57 +1,91 @@
 /**
- * ⚠️ CONFIGURAÇÃO FIREBASE - MUSICOSBOOKING.PT
- *
- * SEGURANÇA:
- * - Estas chaves são PÚBLICAS (Firebase Web SDK)
- * - Proteção real: Firebase Security Rules + domínios autorizados
- * - NUNCA adicionar Service Account Keys aqui
- *
- * ROTAÇÃO DE CREDENCIAIS:
- * 1. Firebase Console > Project Settings > General
- * 2. Remover app web atual
- * 3. Criar novo app web
- * 4. Copiar novas credenciais aqui
- * 5. Atualizar domínios autorizados
+ * Firebase Configuration for MúsicosBooking.pt
+ * 
+ * IMPORTANTE: Substituir com credenciais reais do seu projeto Firebase
+ * Nunca adicione credenciais reais diretamente no código git!
+ * Use variáveis de ambiente ou um arquivo .env
  */
 
-const FIREBASE_CONFIG = {
-  // ⚠️ SUBSTITUIR COM NOVAS CREDENCIAIS APÓS ROTAÇÃO
-  apiKey: "AIzaSyBgJ8xYzFxjGzYzGzYzGzYzGzYzGzYzGz8", // Rotacionar no Firebase Console
-  authDomain: "musicosbooking-c344c.firebaseapp.com",
-  projectId: "musicosbooking-c344c",
-  storageBucket: "musicosbooking-c344c.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef1234567890"
+export const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "musicosbooking-xxxxx.firebaseapp.com",
+  projectId: "musicosbooking-xxxxx",
+  storageBucket: "musicosbooking-xxxxx.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abcdef123456"
 };
 
-/**
- * DOMÍNIOS AUTORIZADOS (configurar no Firebase Console)
- * Authentication > Settings > Authorized domains
- */
-const AUTHORIZED_DOMAINS = [
-  'dba66369.github.io',
-  'localhost' // Apenas para desenvolvimento
-];
+// Email de administrador para notificações
+export const ADMIN_EMAIL = "admin@musicosbooking.pt";
 
-/**
- * CONFIGURAÇÃO DE SEGURANÇA
- */
-const SECURITY_CONFIG = {
-  // Tempo de expiração de sessão (24 horas)
-  sessionTimeout: 24 * 60 * 60 * 1000,
-  
-  // Máximo de tentativas de login
+// Configuração de Segurança
+export const SECURITY_CONFIG = {
   maxLoginAttempts: 5,
-  
-  // Tempo de bloqueio após tentativas falhadas (15 minutos)
-  lockoutDuration: 15 * 60 * 1000,
-  
-  // Validação de email obrigatória
-  requireEmailVerification: true
+  lockoutDuration: 900000, // 15 minutos
+  sessionTimeout: 3600000, // 1 hora
+  passwordMinLength: 8,
+  requireEmailVerification: true,
+  rateLimitRequests: 100, // por minuto
+  rateLimitWindow: 60000 // 1 minuto
 };
 
-// ═══════════════════════════════════════════════════════════════
-// 📤 EXPORTAR CONFIGURAÇÕES (ESM - ES6 Modules)
-// ═══════════════════════════════════════════════════════════════
+// Configuração de Templates de Email
+export const EMAIL_TEMPLATES = {
+  welcome: {
+    subject: "Bem-vindo ao MúsicosBooking.pt!",
+    template: "welcome"
+  },
+  verification: {
+    subject: "Verifique o seu email",
+    template: "verification"
+  },
+  passwordReset: {
+    subject: "Recuperação de password",
+    template: "password_reset"
+  },
+  newUserAdmin: {
+    subject: "Novo registo no MúsicosBooking.pt",
+    template: "new_user_admin"
+  },
+  userDeletedAdmin: {
+    subject: "Utilizador deletou a conta",
+    template: "user_deleted_admin"
+  },
+  bookingConfirmed: {
+    subject: "Booking confirmado!",
+    template: "booking_confirmed"
+  },
+  bookingUpdated: {
+    subject: "Booking atualizado",
+    template: "booking_updated"
+  },
+  paymentConfirmed: {
+    subject: "Pagamento confirmado",
+    template: "payment_confirmed"
+  }
+};
 
-export { FIREBASE_CONFIG, SECURITY_CONFIG, AUTHORIZED_DOMAINS };// Exportar todas as configurações
+// Tipos de utilizador
+export const USER_TYPES = {
+  MUSICIAN: "musician",
+  COMPANY: "company",
+  ADMIN: "admin"
+};
+
+// Status de booking
+export const BOOKING_STATUS = {
+  PENDING: "pending",
+  CONFIRMED: "confirmed",
+  COMPLETED: "completed",
+  CANCELLED: "cancelled",
+  DISPUTE: "dispute"
+};
+
+// Métodos de pagamento
+export const PAYMENT_METHODS = {
+  BANK_TRANSFER: "bank_transfer",
+  PAYPAL: "paypal",
+  MBWAY: "mbway"
+};
+
+console.log('✅ Firebase config loaded successfully');
