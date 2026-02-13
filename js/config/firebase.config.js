@@ -89,3 +89,7 @@ export const PAYMENT_METHODS = {
 };
 
 console.log('✅ Firebase config loaded successfully');
+
+
+// Função para obter a configuração do Firebase
+export const getFirebaseConfig = () => FIREBASE_CONFIG;
