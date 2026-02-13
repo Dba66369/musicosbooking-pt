@@ -25,14 +25,11 @@
         .card h2 { color: #D4AF37; margin-bottom: 1rem; border-bottom: 2px solid #f5f5f5; padding-bottom: 0.5rem; }
         .btn-gold { background: #D4AF37; color: #1a1a1a; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
         .btn-gold:hover { background: #b8941f; }
-        
-        /* Modal Style */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); overflow-y: auto; }
         .modal-content { background: white; margin: 5% auto; padding: 2rem; border-radius: 8px; width: 80%; max-width: 800px; }
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 0.3rem; }
         .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; }
-        
         .empty-state { text-align: center; color: #666; padding: 2rem; }
         footer { background: #1a1a1a; color: white; text-align: center; padding: 2rem; margin-top: 4rem; }
     </style>
@@ -50,7 +47,6 @@
             </div>
         </nav>
     </header>
-
     <div class="container" id="mainContent">
         <section id="dashboardSection">
             <div class="welcome-section">
@@ -59,11 +55,10 @@
                 </div>
                 <div>
                     <h1 id="welcomeText">Bem-vindo, Músico</h1>
-                    <p id="profileSpecialty">Complete o seu perfil para começar a receber propostas.</p>
+                    <p id="profileSpecialty">Carregando perfil...</p>
                     <button class="btn-gold" onclick="openModal('profileModal')" style="margin-top: 1rem;">Editar Perfil</button>
                 </div>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3 id="statBookings">0</h3>
@@ -82,7 +77,6 @@
                     <p>Perfil Views</p>
                 </div>
             </div>
-
             <div class="dashboard-grid">
                 <div class="left-col">
                     <div class="card">
@@ -121,13 +115,9 @@
                         <input type="text" id="editNome" required>
                     </div>
                     <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <input type="date" id="editNasc" required>
+                        <label>Especialidade Musical</label>
+                        <input type="text" id="editEspecialidade" placeholder="Ex: Violão Clássico">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Especialidade Musical</label>
-                    <input type="text" id="editEspecialidade" placeholder="Ex: Violão Clássico, Banda de Rock">
                 </div>
                 <div class="form-group">
                     <label>Biografia</label>
@@ -139,11 +129,17 @@
                 </div>
                 <h3>Redes Sociais</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group"><label>Instagram</label><input type="text" id="editInsta"></div>
-                    <div class="form-group"><label>YouTube</label><input type="text" id="editYoutube"></div>
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="text" id="editInsta">
+                    </div>
+                    <div class="form-group">
+                        <label>YouTube</label>
+                        <input type="text" id="editYoutube">
+                    </div>
                 </div>
-                <div style="margin-top: 1.5rem; text-align: right;">
-                    <button type="button" class="btn-gold" style="background:#666; color:white;" onclick="closeModal('profileModal')">Cancelar</button>
+                <div style="margin-top: 2rem; text-align: right;">
+                    <button type="button" class="btn-gold" onclick="closeModal('profileModal')" style="background: #ccc;">Cancelar</button>
                     <button type="submit" class="btn-gold">Guardar Alterações</button>
                 </div>
             </form>
@@ -151,49 +147,75 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
-        <p><a href="#" style="color:#D4AF37;">Contacto</a> | <a href="#" style="color:#D4AF37;">Privacidade</a> | <a href="#" style="color:#D4AF37;">Termos</a></p>
+        <p>© 2026 MúsicosBooking.pt. Todos os direitos reservados.</p>
+        <p><a href="#">Contacto</a> | <a href="#">Privacidade</a> | <a href="#">Termos</a></p>
     </footer>
 
-    <script>
-        function loadData() {
-            const nome = localStorage.getItem('usuario_nome') || 'Músico';
-            const especialidade = localStorage.getItem('musico_especialidade') || 'Complete o seu perfil';
-            
-            document.getElementById('welcomeText').innerText = 'Bem-vindo, ' + nome;
-            document.getElementById('profileSpecialty').innerText = especialidade;
-            
-            // Pre-fill form
-            document.getElementById('editNome').value = localStorage.getItem('usuario_nome') || '';
-            document.getElementById('editEspecialidade').value = localStorage.getItem('musico_especialidade') || '';
-            document.getElementById('editBio').value = localStorage.getItem('musico_bio') || '';
-            document.getElementById('editCache').value = localStorage.getItem('musico_cache') || '';
+    <script type="module">
+        import './js/auth.js';
+        import { db } from './js/firebase.js';
+        import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const welcomeText = document.getElementById('welcomeText');
+        const profileSpecialty = document.getElementById('profileSpecialty');
+        const editNome = document.getElementById('editNome');
+        const editEspecialidade = document.getElementById('editEspecialidade');
+        const editBio = document.getElementById('editBio');
+        const editCache = document.getElementById('editCache');
+        const editInsta = document.getElementById('editInsta');
+        const editYoutube = document.getElementById('editYoutube');
+
+        async function loadData(user) {
+            if (!user) return;
+            try {
+                const docRef = doc(db, 'musicians', user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    welcomeText.innerText = 'Bem-vindo, ' + (user.profile.name || 'Músico');
+                    profileSpecialty.innerText = data.specialty || 'Complete o seu perfil';
+                    editNome.value = user.profile.name || '';
+                    editEspecialidade.value = data.specialty || '';
+                    editBio.value = data.bio || '';
+                    editCache.value = data.pricePerEvent || 0;
+                    editInsta.value = data.social?.instagram || '';
+                    editYoutube.value = data.social?.youtube || '';
+                    document.getElementById('statBookings').innerText = data.stats?.totalBookings || 0;
+                    document.getElementById('statEarnings').innerText = '€' + (data.stats?.totalEarnings || 0).toFixed(2);
+                    document.getElementById('statRating').innerText = (data.stats?.avgRating || 0).toFixed(1);
+                }
+            } catch (error) { console.error('Error loading data:', error); }
         }
 
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        window.authSystem.onAuthStateChange((user) => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            if (user.userType !== 'musician') { window.location.href = 'dashboard-empresa.html'; return; }
+            loadData(user);
+        });
 
-        document.getElementById('profileForm').onsubmit = function(e) {
+        window.openModal = (id) => document.getElementById(id).style.display = 'block';
+        window.closeModal = (id) => document.getElementById(id).style.display = 'none';
+
+        document.getElementById('profileForm').onsubmit = async (e) => {
             e.preventDefault();
-            localStorage.setItem('usuario_nome', document.getElementById('editNome').value);
-            localStorage.setItem('musico_especialidade', document.getElementById('editEspecialidade').value);
-            localStorage.setItem('musico_bio', document.getElementById('editBio').value);
-            localStorage.setItem('musico_cache', document.getElementById('editCache').value);
-            loadData();
-            closeModal('profileModal');
-            alert('Perfil atualizado com sucesso!');
+            const user = window.authSystem.getCurrentUser();
+            if (!user) return;
+            try {
+                await updateDoc(doc(db, 'musicians', user.uid), {
+                    specialty: editEspecialidade.value,
+                    bio: editBio.value,
+                    pricePerEvent: parseFloat(editCache.value) || 0,
+                    'social.instagram': editInsta.value,
+                    'social.youtube': editYoutube.value
+                });
+                await updateDoc(doc(db, 'users', user.uid), { 'profile.name': editNome.value });
+                alert('Perfil atualizado!');
+                location.reload();
+            } catch (error) { alert('Erro: ' + error.message); }
         };
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
-
-        function showSection(name) {
-            alert('A funcionalidade ' + name + ' será integrada com o banco de dados em breve.');
-        }
-
-        window.onload = loadData;
+        window.logout = async () => { await window.authSystem.logout(); window.location.href = 'index.html'; };
+        window.showSection = (name) => alert('A funcionalidade ' + name + ' está em desenvolvimento.');
     </script>
 </body>
 </html>
