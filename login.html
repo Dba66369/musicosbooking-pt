@@ -91,10 +91,10 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
+            
             submitBtn.disabled = true;
             submitBtn.textContent = 'A entrar...';
-
+            
             try {
                 const result = await window.authSystem.login(email, password);
                 showMessage('Login efetuado com sucesso!', 'success');
@@ -112,7 +112,7 @@
                 showMessage(error.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Entrar';
-            }fix: Correct Firebase import and use authSystem in login.html - DIA 1/2
+            }
         });
 
         document.getElementById('forgotPassword').addEventListener('click', async (e) => {
