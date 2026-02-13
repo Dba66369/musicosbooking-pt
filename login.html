@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MúsicosBooking</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +15,6 @@
             align-items: center;
             padding: 20px;
         }
-
         .container {
             background: white;
             padding: 40px;
@@ -29,41 +23,16 @@
             width: 100%;
             max-width: 400px;
         }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-        }
-
-        input[type="email"],
-        input[type="password"] {
+        h1 { text-align: center; color: #333; margin-bottom: 30px; font-size: 28px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; color: #555; font-weight: 500; }
+        input[type="email"], input[type="password"] {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            transition: border-color 0.3s;
         }
-
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
         .btn {
             width: 100%;
             padding: 12px;
@@ -74,104 +43,40 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .links {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .links a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .links a:hover {
-            text-decoration: underline;
-        }
-
-        .divider {
-            margin: 15px 0;
-            color: #999;
-        }
-
-        .message {
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .message.error {
-            background: #fee;
-            color: #c33;
-            border: 1px solid #fcc;
-        }
-
-        .message.success {
-            background: #efe;
-            color: #3c3;
-            border: 1px solid #cfc;
-        }
-
-        .message.show {
-            display: block;
-        }
+        .links { margin-top: 20px; text-align: center; }
+        .links a { color: #667eea; text-decoration: none; font-size: 14px; }
+        .message { padding: 12px; border-radius: 5px; margin-bottom: 20px; display: none; }
+        .message.error { background: #fee; color: #c33; border: 1px solid #fcc; }
+        .message.success { background: #efe; color: #3c3; border: 1px solid #cfc; }
+        .message.show { display: block; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Login</h1>
-        
         <div id="message" class="message"></div>
-        
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" required>
             </div>
-            
             <div class="form-group">
                 <label for="password">Palavra-passe:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" required>
             </div>
-            
             <button type="submit" class="btn" id="submitBtn">Entrar</button>
         </form>
-        
         <div class="links">
             <a href="#" id="forgotPassword">Esqueceu a palavra-passe?</a>
-            <div class="divider">—</div>
-            <a href="cadastro.html">Não tem conta? Registe-se</a>
+            <div style="margin: 10px 0; color: #999;">—</div>
+            <a href="registo.html">Não tem conta? Registe-se</a>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        // Importar configuração Firebase
-        import { firebaseConfig } from './config/firebase-config.js';
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
+        import './js/auth.js';
+        
         const loginForm = document.getElementById('loginForm');
         const messageDiv = document.getElementById('message');
         const submitBtn = document.getElementById('submitBtn');
@@ -179,77 +84,44 @@
         function showMessage(message, type) {
             messageDiv.textContent = message;
             messageDiv.className = `message ${type} show`;
-            setTimeout(() => {
-                messageDiv.className = 'message';
-            }, 5000);
+            setTimeout(() => { messageDiv.className = 'message'; }, 5000);
         }
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                showMessage('Por favor, preencha todos os campos.', 'error');
-                return;
-            }
-            
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'A entrar...';
-            
+
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                showMessage('Login efetuado com sucesso! A redirecionar...', 'success');
+                const result = await window.authSystem.login(email, password);
+                showMessage('Login efetuado com sucesso!', 'success');
                 
-                // Redirecionar para a página da conta após 1 segundo
                 setTimeout(() => {
-                    window.location.href = 'conta.html';
+                    if (result.userType === 'musician') {
+                        window.location.href = 'dashboard-musico.html';
+                    } else if (result.userType === 'company') {
+                        window.location.href = 'dashboard-empresa.html';
+                    } else {
+                        window.location.href = 'conta.html';
+                    }
                 }, 1000);
-                
             } catch (error) {
-                console.error('Erro no login:', error);
-                
-                let errorMessage = 'Erro ao fazer login. Tente novamente.';
-                
-                switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Email inválido.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage = 'Conta desativada. Contacte o suporte.';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'Utilizador não encontrado.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'Palavra-passe incorreta.';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'Muitas tentativas. Tente mais tarde.';
-                        break;
-                    case 'auth/network-request-failed':
-                        errorMessage = 'Erro de rede. Verifique a ligação.';
-                        break;
-                    case 'auth/invalid-credential':
-                        errorMessage = 'Email ou palavra-passe incorretos.';
-                        break;
-                }
-                
-                showMessage(errorMessage, 'error');
+                showMessage(error.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Entrar';
-            }
+            }fix: Correct Firebase import and use authSystem in login.html - DIA 1/2
         });
 
-        // Link de recuperação de password
         document.getElementById('forgotPassword').addEventListener('click', async (e) => {
             e.preventDefault();
-            const email = prompt('Introduza o seu email para recuperar a password:');
+            const email = prompt('Introduza o seu email:');
             if (email) {
                 try {
                     await window.authSystem.recoverPassword(email);
-                    showMessage('Email de recuperação enviado! Verifique a sua caixa de entrada.', 'success');
+                    showMessage('Email de recuperação enviado!', 'success');
                 } catch (error) {
                     showMessage(error.message, 'error');
                 }
