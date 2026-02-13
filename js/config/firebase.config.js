@@ -50,7 +50,8 @@ const SECURITY_CONFIG = {
   requireEmailVerification: true
 };
 
-// Exportar configurações
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { FIREBASE_CONFIG, SECURITY_CONFIG, AUTHORIZED_DOMAINS };
-}
+// ═══════════════════════════════════════════════════════════════
+// 📤 EXPORTAR CONFIGURAÇÕES (ESM - ES6 Modules)
+// ═══════════════════════════════════════════════════════════════
+
+export { FIREBASE_CONFIG, SECURITY_CONFIG, AUTHORIZED_DOMAINS };// Exportar todas as configurações
