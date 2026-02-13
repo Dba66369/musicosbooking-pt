@@ -312,3 +312,82 @@ exports.getUserStatus = functions.https.onRequest((req, res) => {
 });
 
 console.log('📝 Firebase Cloud Functions carregadas');
+
+
+/**
+ * CLOUD FUNCTION 6: Notificar admin quando novo utilizador se regista
+ */
+exports.onUserCreated = functions.auth.user().onCreate(async (user) => {
+    try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        // Notificar Admin no Firestore
+        await db.collection('admin_notifications').add({
+            type: 'new_user',
+            userId: user.uid,
+            email: user.email,
+            userType: userData ? (userData.tipo || userData.userType) : 'N/A',
+            createdAt: admin.firestore.Timestamp.now(),
+            read: false
+        });
+
+        console.log(`📧 Notificação de novo utilizador enviada para o admin: ${user.email}`);
+    } catch (error) {
+        console.error('❌ Erro na trigger onUserCreated:', error);
+    }
+});
+
+/**
+ * CLOUD FUNCTION 7: Notificar admin quando utilizador deleta a conta
+ */
+exports.onUserDeleted = functions.auth.user().onDelete(async (user) => {
+    try {
+        // Notificar Admin no Firestore
+        await db.collection('admin_notifications').add({
+            type: 'user_deleted',
+            userId: user.uid,
+            email: user.email,
+            deletedAt: admin.firestore.Timestamp.now(),
+            read: false
+        });
+
+        console.log(`📧 Notificação de conta deletada enviada para o admin: ${user.email}`);
+    } catch (error) {
+        console.error('❌ Erro na trigger onUserDeleted:', error);
+    }
+});
+
+/**
+ * CLOUD FUNCTION 8: Relatório Mensal Automático
+ * Executa no primeiro dia de cada mês às 00:00
+ */
+exports.sendMonthlyReport = functions.pubsub.schedule('0 0 1 * *').onRun(async (context) => {
+    try {
+        const now = new Date();
+        const prevMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+        const year = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+        
+        const firstDayOfMonth = new Date(year, prevMonth, 1);
+        
+        const usersSnapshot = await db.collection('users')
+            .where('createdAt', '>=', admin.firestore.Timestamp.fromDate(firstDayOfMonth))
+            .get();
+        
+        const totalUsers = usersSnapshot.size;
+        
+        // Guardar relatório no Firestore
+        await db.collection('monthly_reports').add({
+            month: `${year}-${prevMonth + 1}`,
+            newUsers: totalUsers,
+            generatedAt: admin.firestore.Timestamp.now()
+        });
+
+        console.log('📊 Relatório mensal gerado com sucesso');
+        return null;
+    } catch (error) {
+        console.error('❌ Erro ao gerar relatório mensal:', error);
+    }
+});
+
+console.log('🚀 Cloud Functions atualizadas com triggers de Admin e Relatórios');
